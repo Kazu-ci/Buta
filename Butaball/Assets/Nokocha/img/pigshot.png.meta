@@ -6,7 +6,11 @@ TextureImporter:
   serializedVersion: 13
   mipmaps:
     mipMapMode: 0
+<<<<<<< HEAD
     enableMipMap: 0
+=======
+    enableMipMap: 1
+>>>>>>> da384e9962c1c9426c147e7a4f7e4a1d255a1e76
     sRGBTexture: 1
     linearTexture: 0
     fadeOut: 0
@@ -37,6 +41,7 @@ TextureImporter:
     filterMode: 1
     aniso: 1
     mipBias: 0
+<<<<<<< HEAD
     wrapU: 1
     wrapV: 1
     wrapW: 0
@@ -44,6 +49,15 @@ TextureImporter:
   lightmap: 0
   compressionQuality: 50
   spriteMode: 1
+=======
+    wrapU: 0
+    wrapV: 0
+    wrapW: 0
+  nPOTScale: 1
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 0
+>>>>>>> da384e9962c1c9426c147e7a4f7e4a1d255a1e76
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -52,9 +66,15 @@ TextureImporter:
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
+<<<<<<< HEAD
   alphaIsTransparency: 1
   spriteTessellationDetail: -1
   textureType: 8
+=======
+  alphaIsTransparency: 0
+  spriteTessellationDetail: -1
+  textureType: 0
+>>>>>>> da384e9962c1c9426c147e7a4f7e4a1d255a1e76
   textureShape: 1
   singleChannelComponent: 0
   flipbookRows: 1
@@ -95,6 +115,7 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
+<<<<<<< HEAD
     sprites:
     - serializedVersion: 2
       name: pigshot_0
@@ -140,11 +161,18 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+=======
+    sprites: []
+>>>>>>> da384e9962c1c9426c147e7a4f7e4a1d255a1e76
     outline: []
     customData: 
     physicsShape: []
     bones: []
+<<<<<<< HEAD
     spriteID: 806fb40d43c36744d8ff62a1ce8b9629
+=======
+    spriteID: 
+>>>>>>> da384e9962c1c9426c147e7a4f7e4a1d255a1e76
     internalID: 0
     vertices: []
     indices: 
@@ -153,9 +181,13 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
+<<<<<<< HEAD
     nameFileIdTable:
       pigshot_0: -2017744839
       pigshot_1: -1762580308
+=======
+    nameFileIdTable: {}
+>>>>>>> da384e9962c1c9426c147e7a4f7e4a1d255a1e76
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
