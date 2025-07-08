@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Unity.VisualScripting;
+using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
@@ -14,6 +15,7 @@ public class Player : MonoBehaviour
     float bTime;
     float cTime;
     float chargePow;
+    Vector3 moveDir;
     enum State
     {
         Idle,
@@ -40,16 +42,16 @@ public class Player : MonoBehaviour
         v = inputAxis.y;   // W,S（-1〜1）
 
         //カメラの正面を取得
-        Vector3 camForward = Vector3.Scale(Camera.main.transform.forward, new Vector3(1, 0, 1)).normalized;
+        Vector3 camForward = new Vector3(1, 0, 1);//Vector3.Scale(Camera.main.transform.forward, new Vector3(1, 0, 1)).normalized;
         //カメラの右側を取得
-        Vector3 camRight = Vector3.Scale(Camera.main.transform.right, new Vector3(1, 0, 1)).normalized;
+        Vector3 camRight = new Vector3(1, 0, 1);//Vector3.Scale(Camera.main.transform.right, new Vector3(1, 0, 1)).normalized;
         //移動方向を格納
-        Vector3 moveDir = camForward * v + camRight * h;
+        moveDir = camForward * v + camRight * h;
         moveDir.Normalize();
         if (moveDir != Vector3.zero)
         {
             //進行方向に体を回転
-            transform.forward = Vector3.Slerp(transform.forward, moveDir, Time.deltaTime * rotateSpeed);
+            rb.AddTorque(moveDir*rotateSpeed);
         }
         Think();
         Move();
@@ -64,7 +66,7 @@ public class Player : MonoBehaviour
                 break;
             case State.Move:
                 if (charge.IsPressed()) { state = State.Charge; }
-                if(move.ReadValue<float>() == 0) { state=State.Bound; }
+                if(move.ReadValue<Vector2>()==new Vector2(0,0)) { state=State.Bound; }
                 break;
             case State.Charge:
                 if (!charge.IsPressed()) { state = State.Bound; }
@@ -81,7 +83,9 @@ public class Player : MonoBehaviour
         switch (state)
         {
             case State.Move:
-                rb.AddForce(transform.forward * speed);
+                Vector3 vec = move.ReadValue<Vector2>();
+                Vector3 dir = new Vector3(vec.x,0,vec.y);
+                rb.AddForce( dir *  speed);
                 break;
             case State.Charge:
                 cTime += Time.deltaTime;
@@ -90,7 +94,10 @@ public class Player : MonoBehaviour
                 {
                     chargePow = 1;
                 }
-                if (!charge.IsPressed()) { rb.AddForce(transform.forward * mChragePow); }
+                if (!charge.IsPressed())
+                {
+                    rb.AddForce(moveDir * mChragePow); 
+                }
                 break;
             case State.Bound:
                 bTime += Time.deltaTime;
