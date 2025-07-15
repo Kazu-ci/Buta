@@ -9,7 +9,9 @@ public class Player : MonoBehaviour
     [SerializeField] PlayerInput action;
     [SerializeField] float rotateSpeed;
     [SerializeField] float mChragePow;
-    [SerializeField] float mSpeed;// 移動速度
+    [SerializeField] float moveForce;
+    [SerializeField] float maxSpeed;
+    [SerializeField] float drag;  // 抵抗（慣性調整）
     float h,v;
     Rigidbody rb;
     InputAction move;
@@ -20,6 +22,7 @@ public class Player : MonoBehaviour
     Vector3 moveDir;
     float speed;
     public LayerMask collisionMask;
+    public Gamepad assignedGamepad;
     enum State
     {
         Idle,
@@ -33,7 +36,11 @@ public class Player : MonoBehaviour
     void Start()
     {
         state=State.Idle;
-        rb=GetComponent<Rigidbody>();
+        rb = GetComponent<Rigidbody>();
+        rb.linearDamping = drag;   // 慣性の減衰を設定
+        rb.angularDamping = 0f;
+        rb.interpolation = RigidbodyInterpolation.Interpolate;
+        rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
         move = action.actions["Move"];
         charge = action.actions["Charge"];
     }
@@ -42,6 +49,7 @@ public class Player : MonoBehaviour
 
     private void FixedUpdate()
     {
+        
         Think();
         if (state != State.Bound)
         {
@@ -52,6 +60,7 @@ public class Player : MonoBehaviour
         {
             Debug.Log("ooo");
         }
+        CollisionPredictionAndReflect();
 
     }
     void Think()
@@ -70,7 +79,8 @@ public class Player : MonoBehaviour
                 if (!charge.IsPressed()) { state = State.Bound; }
                 break;
             case State.Bound:
-                if (bTime >= 1f) { state = State.Idle; bTime = 0; }
+                bTime += Time.deltaTime;
+                if (bTime >= 0.5f) { state = State.Idle; bTime = 0; }
                 break;
             case State.Die:
                 break;
@@ -81,10 +91,22 @@ public class Player : MonoBehaviour
         switch (state)
         {
             case State.Move:
+                if (move.activeControl?.device != assignedGamepad &&
+            charge.activeControl?.device != assignedGamepad)
+                {
+                    Debug.Log("nun");
+                    return;
+                }
                 OnMove();
                 break;
 
             case State.Charge:
+                if (move.activeControl?.device != assignedGamepad &&
+            charge.activeControl?.device != assignedGamepad)
+                {
+                    Debug.Log("nun");
+                    return;
+                }
                 cTime += Time.deltaTime;
                 chargePow = cTime / 5;
                 if (chargePow >= 1)
@@ -99,6 +121,7 @@ public class Player : MonoBehaviour
 
 
             case State.Bound:
+                Debug.Log("Boundだよ");
                 bTime += Time.deltaTime;
                 // 反射中は速度を直接操作しない（物理演算に任せる）
                 break;
@@ -111,9 +134,14 @@ public class Player : MonoBehaviour
     }
     public void OnMove()
     {
-        speed += accelaration * Time.fixedDeltaTime;
-        if (speed > mSpeed) speed = mSpeed;
-        rb.linearVelocity = moveDir * speed;
+        if (moveDir.sqrMagnitude > 0.01f)
+        {
+            // 最大速度制限
+            if (rb.linearVelocity.magnitude < maxSpeed)
+            {
+                rb.AddForce(moveDir * moveForce);
+            }
+        }
     }
     void Angle()
     {
@@ -134,24 +162,35 @@ public class Player : MonoBehaviour
             transform.forward = Vector3.Slerp(transform.forward, moveDir, Time.deltaTime * rotateSpeed);
         }
     }
-    private void OnCollisionEnter(Collision collision)
+  
+
+    void CollisionPredictionAndReflect()
     {
-        Debug.Log("Boundだよ");
-        Rigidbody otherRb = collision.rigidbody;
-            if (otherRb == null) return;
-            ContactPoint contact = collision.contacts[0];
-            Vector3 reflected = Vector3.Reflect(otherRb.linearVelocity, contact.normal);
-            otherRb.linearVelocity = reflected;
+        Vector3 velocity = rb.linearVelocity;
+        float speed = velocity.magnitude;
 
-            // プレイヤーを反射状態にする
-            state = State.Bound;
-            bTime = 0;
-    }
+        if (speed < 0.01f) return;
 
+        Vector3 direction = velocity.normalized;
+        Ray ray = new Ray(transform.position, Vector3.zero);
+        var sphereRadius = 0.7f;
+        RaycastHit hit;
+        var rayLength = 0.00000f;
+        if (Physics.SphereCast(ray, sphereRadius, out hit, rayLength, collisionMask))
+        {
+            Vector3 hitNormal = hit.normal;
+            Vector3 reflected = Vector3.Reflect(velocity, hitNormal);
 
-    void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, 0.5f);
+            rb.linearVelocity = Vector3.zero; // 一度停止
+            rb.AddForce(reflected.normalized * 25, ForceMode.VelocityChange);
+
+            Debug.DrawRay(transform.position, direction * hit.distance, Color.red, 0.2f);
+            Debug.DrawRay(hit.point, hitNormal, Color.yellow, 0.2f);
+
+        }
+        else
+        {
+            Debug.DrawRay(transform.position, direction * rayLength, Color.green, 0.1f);
+        }
     }
 }
