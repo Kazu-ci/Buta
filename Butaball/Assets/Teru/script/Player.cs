@@ -42,16 +42,17 @@ public class Player : MonoBehaviour
 
     private void FixedUpdate()
     {
+        Think();
         if (state != State.Bound)
         {
             Angle();
-            Think();
             Move();
         }
         else
         {
             Debug.Log("ooo");
         }
+
     }
     void Think()
     {
@@ -104,7 +105,7 @@ public class Player : MonoBehaviour
 
             case State.Die:
                 // 動かないようにゼロ代入など
-                rb.velocity = Vector3.zero;
+                rb.linearVelocity = Vector3.zero;
                 break;
         }
     }
@@ -112,7 +113,7 @@ public class Player : MonoBehaviour
     {
         speed += accelaration * Time.fixedDeltaTime;
         if (speed > mSpeed) speed = mSpeed;
-        rb.velocity = moveDir * speed;
+        rb.linearVelocity = moveDir * speed;
     }
     void Angle()
     {
@@ -135,13 +136,12 @@ public class Player : MonoBehaviour
     }
     private void OnCollisionEnter(Collision collision)
     {
-
-            Rigidbody otherRb = collision.rigidbody;
+        Debug.Log("Boundだよ");
+        Rigidbody otherRb = collision.rigidbody;
             if (otherRb == null) return;
-
             ContactPoint contact = collision.contacts[0];
-            Vector3 reflected = Vector3.Reflect(otherRb.velocity, contact.normal);
-            otherRb.velocity = reflected;
+            Vector3 reflected = Vector3.Reflect(otherRb.linearVelocity, contact.normal);
+            otherRb.linearVelocity = reflected;
 
             // プレイヤーを反射状態にする
             state = State.Bound;

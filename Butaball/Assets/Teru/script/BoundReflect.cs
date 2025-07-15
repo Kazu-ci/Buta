@@ -6,20 +6,20 @@ public class BoundReflect : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("Õ“ËI");
+        Debug.Log("åå°„ãƒ¼");
         Rigidbody otherRb = collision.rigidbody;
         if (otherRb == null) return;
 
-        // ÚG“_‚©‚ç–@üƒxƒNƒgƒ‹‚ğæ“¾
+        // ï¿½ÚGï¿½_ï¿½ï¿½ï¿½ï¿½@ï¿½ï¿½ï¿½xï¿½Nï¿½gï¿½ï¿½ï¿½ï¿½ï¿½æ“¾
         ContactPoint contact = collision.contacts[0];
-        Vector3 inVelocity = otherRb.velocity;
+        Vector3 inVelocity = otherRb.linearVelocity;
         Vector3 normal = contact.normal;
 
-        // ”½ËƒxƒNƒgƒ‹‚ğŒvZ
+        // ï¿½ï¿½ï¿½Ëƒxï¿½Nï¿½gï¿½ï¿½ï¿½ï¿½ï¿½vï¿½Z
         Vector3 reflected = Vector3.Reflect(inVelocity, normal);
 
-        // ”½ËŒã‚Ì‘¬“x‚ğ“K—pi‘¬“xˆÛ or Œ¸Šj
-        otherRb.velocity = reflected.normalized * inVelocity.magnitude;
+        // ï¿½ï¿½ï¿½ËŒï¿½Ì‘ï¿½ï¿½xï¿½ï¿½Kï¿½pï¿½iï¿½ï¿½ï¿½xï¿½Ûï¿½ or ï¿½ï¿½ï¿½ï¿½ï¿½j
+        otherRb.linearVelocity = reflected.normalized * inVelocity.magnitude;
 
     }
 }
