@@ -1,12 +1,18 @@
-﻿using UnityEngine;
+﻿using Unity.VisualScripting;
+using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UIElements;
 
 public class Player : MonoBehaviour
 {
+    [SerializeField] float accelaration;
     [SerializeField] PlayerInput action;
     [SerializeField] float rotateSpeed;
     [SerializeField] float mChragePow;
-    [SerializeField] float speed;  // 移動速度
+    [SerializeField] float moveForce;
+    [SerializeField] float maxSpeed;
+    [SerializeField] float drag;  // 抵抗（慣性調整）
+    [SerializeField] float cDrag;  // 抵抗（慣性調整）
     float h,v;
     Rigidbody rb;
     InputAction move;
@@ -14,11 +20,15 @@ public class Player : MonoBehaviour
     float bTime;
     float cTime;
     float chargePow;
+    Vector3 moveDir;
+    float speed;
+    public LayerMask collisionMask;
+    public Gamepad assignedGamepad;
     enum State
     {
         Idle,
         Move,
-        Charge,
+        Brake,
         Bound,
         Die,
     }
@@ -27,50 +37,68 @@ public class Player : MonoBehaviour
     void Start()
     {
         state=State.Idle;
-        rb=GetComponent<Rigidbody>();
+        rb = GetComponent<Rigidbody>();
+        rb.linearDamping = drag;   // 慣性の減衰を設定
+        rb.angularDamping = 0f;
+        rb.interpolation = RigidbodyInterpolation.Interpolate;
+        rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
         move = action.actions["Move"];
         charge = action.actions["Charge"];
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        var inputAxis=move.ReadValue<Vector2>();
-        h = inputAxis.x;
-        v = inputAxis.y;   // W,S（-1〜1）
-
-        //カメラの正面を取得
-        Vector3 camForward = Vector3.Scale(Camera.main.transform.forward, new Vector3(1, 0, 1)).normalized;
-        //カメラの右側を取得
-        Vector3 camRight = Vector3.Scale(Camera.main.transform.right, new Vector3(1, 0, 1)).normalized;
-        //移動方向を格納
-        Vector3 moveDir = camForward * v + camRight * h;
-        moveDir.Normalize();
-        if (moveDir != Vector3.zero)
-        {
-            //進行方向に体を回転
-            transform.forward = Vector3.Slerp(transform.forward, moveDir, Time.deltaTime * rotateSpeed);
-        }
         Think();
-        Move();
+
+    }
+    private void FixedUpdate()
+    {
+        if (state != State.Bound)
+        {
+            Angle();
+            Move();
+        }
+        CollisionPredictionAndReflect();
+        Debug.Log(state);
     }
     void Think()
     {
+        if (state == State.Brake)
+        {
+            if (!charge.IsPressed())
+            {
+                state = State.Bound;
+                rb.linearDamping = drag;
+            }
+            return;
+        }
         switch (state)
         {
             case State.Idle:
                 if (move.ReadValue<Vector2>()!=new Vector2(0,0) ){ state = State.Move; }
-                if (charge.IsPressed()) { state = State.Charge; }
+                if (charge.IsPressed()) { state = State.Brake; }
                 break;
             case State.Move:
-                if (charge.IsPressed()) { state = State.Charge; }
-                if(move.ReadValue<float>() == 0) { state=State.Bound; }
+                if (charge.IsPressed()) { state = State.Brake; }
+                if(move.ReadValue<Vector2>()==new Vector2(0,0)) { state = State.Idle;speed = 0; }
                 break;
-            case State.Charge:
+            case State.Brake:
                 if (!charge.IsPressed()) { state = State.Bound; }
                 break;
             case State.Bound:
-                if (bTime >= 1f) { state = State.Idle; bTime = 0; }
+                bTime += Time.deltaTime;
+                if (bTime >= 0.5f) 
+                {
+                    if (rb.linearVelocity.magnitude < 0.1f)
+                    {
+                        state = State.Idle;  // 停止していればIdleへ
+                    }
+                    else
+                    {
+                        state = State.Move;  // 動いていればMoveへ戻す
+                    }
+                }
                 break;
             case State.Die:
                 break;
@@ -81,22 +109,95 @@ public class Player : MonoBehaviour
         switch (state)
         {
             case State.Move:
-                rb.AddForce(transform.forward * speed);
-                break;
-            case State.Charge:
-                cTime += Time.deltaTime;
-                chargePow = cTime / 5;
-                if(chargePow >= 1)
+                if (move.activeControl?.device != assignedGamepad &&
+            charge.activeControl?.device != assignedGamepad)
                 {
-                    chargePow = 1;
+                    Debug.Log("nun");
+                    return;
                 }
-                if (!charge.IsPressed()) { rb.AddForce(transform.forward * mChragePow); }
+                OnMove();
+                break;
+
+            case State.Brake:
+                if (move.activeControl?.device != assignedGamepad &&
+            charge.activeControl?.device != assignedGamepad)
+                {
+                    return;
+                }
+                rb.linearVelocity *= cDrag;
                 break;
             case State.Bound:
+                Debug.Log("Boundだよ");
                 bTime += Time.deltaTime;
+                // 反射中は速度を直接操作しない（物理演算に任せる）
                 break;
+
             case State.Die:
+                // 動かないようにゼロ代入など
+                rb.linearVelocity = Vector3.zero;
                 break;
         }
     }
+    public void OnMove()
+    {
+        if (moveDir.sqrMagnitude > 0.01f)
+        {
+            // 最大速度制限
+            if (rb.linearVelocity.magnitude < maxSpeed)
+            {
+                rb.AddForce(moveDir * moveForce);
+            }
+        }
+    }
+    void Angle()
+    {
+        var inputAxis = action.actions["Move"].ReadValue<Vector2>();
+        h = inputAxis.x;
+        v = inputAxis.y;   
+        //カメラの正面を取得
+        Vector3 camForward = Vector3.Scale(Camera.main.transform.forward, new Vector3(1, 0, 1)).normalized;
+        //カメラの右側を取得
+        Vector3 camRight = Vector3.Scale(Camera.main.transform.right, new Vector3(1, 0, 1)).normalized;
+        //移動方向を格納
+        moveDir = camForward * v + camRight * h;
+        moveDir.Normalize();
+
+        if (moveDir != Vector3.zero)
+        {
+            
+            transform.forward = Vector3.Slerp(transform.forward, moveDir, Time.deltaTime * rotateSpeed);
+        }
+    }
+  
+
+    void CollisionPredictionAndReflect()
+    {
+        Vector3 velocity = rb.linearVelocity;
+        float speed = velocity.magnitude;
+
+        if (speed < 0.01f) return;
+
+        Vector3 direction = velocity.normalized;
+        Ray ray = new Ray(transform.position, Vector3.zero);
+        var sphereRadius = 0.7f;
+        RaycastHit hit;
+        var rayLength = 0.00000f;
+        if (Physics.SphereCast(ray, sphereRadius, out hit, rayLength, collisionMask))
+        {
+            Vector3 hitNormal = hit.normal;
+            Vector3 reflected = Vector3.Reflect(velocity, hitNormal);
+
+            rb.linearVelocity = Vector3.zero; // 一度停止
+            rb.AddForce(reflected.normalized * 25, ForceMode.VelocityChange);
+
+            Debug.DrawRay(transform.position, direction * hit.distance, Color.red, 0.2f);
+            Debug.DrawRay(hit.point, hitNormal, Color.yellow, 0.2f);
+
+        }
+        else
+        {
+            Debug.DrawRay(transform.position, direction * rayLength, Color.green, 0.1f);
+        }
+    }
+  
 }
