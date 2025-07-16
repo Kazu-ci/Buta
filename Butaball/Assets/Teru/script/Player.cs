@@ -12,6 +12,7 @@ public class Player : MonoBehaviour
     [SerializeField] float moveForce;
     [SerializeField] float maxSpeed;
     [SerializeField] float drag;  // 抵抗（慣性調整）
+    [SerializeField] float cDrag;  // 抵抗（慣性調整）
     float h,v;
     Rigidbody rb;
     InputAction move;
@@ -27,7 +28,7 @@ public class Player : MonoBehaviour
     {
         Idle,
         Move,
-        Charge,
+        Brake,
         Bound,
         Die,
     }
@@ -46,41 +47,58 @@ public class Player : MonoBehaviour
     }
 
     // Update is called once per frame
+    private void Update()
+    {
+        Think();
 
+    }
     private void FixedUpdate()
     {
-        
-        Think();
         if (state != State.Bound)
         {
             Angle();
             Move();
         }
-        else
-        {
-            Debug.Log("ooo");
-        }
         CollisionPredictionAndReflect();
-
+        Debug.Log(state);
     }
     void Think()
     {
+        if (state == State.Brake)
+        {
+            if (!charge.IsPressed())
+            {
+                state = State.Bound;
+                rb.linearDamping = drag;
+            }
+            return;
+        }
         switch (state)
         {
             case State.Idle:
                 if (move.ReadValue<Vector2>()!=new Vector2(0,0) ){ state = State.Move; }
-                if (charge.IsPressed()) { state = State.Charge; }
+                if (charge.IsPressed()) { state = State.Brake; }
                 break;
             case State.Move:
-                if (charge.IsPressed()) { state = State.Charge; }
+                if (charge.IsPressed()) { state = State.Brake; }
                 if(move.ReadValue<Vector2>()==new Vector2(0,0)) { state = State.Idle;speed = 0; }
                 break;
-            case State.Charge:
+            case State.Brake:
                 if (!charge.IsPressed()) { state = State.Bound; }
                 break;
             case State.Bound:
                 bTime += Time.deltaTime;
-                if (bTime >= 0.5f) { state = State.Idle; bTime = 0; }
+                if (bTime >= 0.5f) 
+                {
+                    if (rb.linearVelocity.magnitude < 0.1f)
+                    {
+                        state = State.Idle;  // 停止していればIdleへ
+                    }
+                    else
+                    {
+                        state = State.Move;  // 動いていればMoveへ戻す
+                    }
+                }
                 break;
             case State.Die:
                 break;
@@ -100,26 +118,14 @@ public class Player : MonoBehaviour
                 OnMove();
                 break;
 
-            case State.Charge:
+            case State.Brake:
                 if (move.activeControl?.device != assignedGamepad &&
             charge.activeControl?.device != assignedGamepad)
                 {
-                    Debug.Log("nun");
                     return;
                 }
-                cTime += Time.deltaTime;
-                chargePow = cTime / 5;
-                if (chargePow >= 1)
-                {
-                    chargePow = 1;
-                }
-                if (!charge.IsPressed())
-                {
-                    rb.AddForce(moveDir * mChragePow);
-                }
+                rb.linearVelocity *= cDrag;
                 break;
-
-
             case State.Bound:
                 Debug.Log("Boundだよ");
                 bTime += Time.deltaTime;
@@ -193,4 +199,5 @@ public class Player : MonoBehaviour
             Debug.DrawRay(transform.position, direction * rayLength, Color.green, 0.1f);
         }
     }
+  
 }
