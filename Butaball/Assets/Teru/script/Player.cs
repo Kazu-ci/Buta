@@ -44,6 +44,7 @@ public class Player : MonoBehaviour
         rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
         move = action.actions["Move"];
         charge = action.actions["Charge"];
+        rb.AddForce(transform.forward * 1000);
     }
 
     // Update is called once per frame
