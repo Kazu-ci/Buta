@@ -33,7 +33,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Skill",
+                    "name": "Fire",
                     "type": "Button",
                     "id": "535766ee-aaf8-4a7a-bf55-1435ecf564f0",
                     "expectedControlType": "",
@@ -266,11 +266,11 @@
                 {
                     "name": "",
                     "id": "5c413974-654c-453c-ac9f-13b34f7df647",
-                    "path": "<Gamepad>/buttonSouth",
+                    "path": "<Gamepad>/leftTrigger",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Skill",
+                    "action": "Fire",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -281,7 +281,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Skill",
+                    "action": "Fire",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
