@@ -47,7 +47,7 @@ public class Player : MonoBehaviour
         move = action.actions["Move"];
         charge = action.actions["Charge"];
         fire = action.actions["Fire"];
-       // rb.AddForce(transform.forward * 10000);
+        // rb.AddForce(transform.forward * 10000);
     }
 
     // Update is called once per frame
@@ -58,12 +58,12 @@ public class Player : MonoBehaviour
     }
     private void FixedUpdate()
     {
+        CollisionPredictionAndReflect();
         if (state != State.Bound)
         {
             Angle();
             Move();
         }
-        CollisionPredictionAndReflect();
         Debug.Log(chargePow);
     }
     void Think()
@@ -128,13 +128,15 @@ public class Player : MonoBehaviour
                     return;
                 }
                 rb.linearVelocity *= cDrag;
-                chargePow += Time.deltaTime*10000;
+                chargePow += Time.deltaTime*60;
                 if(chargePow>=mChragePow) { chargePow=mChragePow; }
                 if(!charge.IsPressed()) { state = State.Idle; chargePow = 0; }
                 if(fire.IsPressed()) { state=State.Fire; }
                 break;
             case State.Fire:
-                rb.AddForce(moveDir * chargePow);
+                Vector3 velocity = rb.linearVelocity;
+                Vector3 moveDirFromVelocity = velocity.magnitude > 0.01f ? velocity.normalized : transform.forward;
+                rb.AddForce(moveDirFromVelocity * chargePow, ForceMode.VelocityChange);
                 chargePow = 0;
                 state = State.Bound;
                 break;
