@@ -9,7 +9,7 @@ public class Player : MonoBehaviour
     [SerializeField] float accelaration;
     [SerializeField] PlayerInput action;
     [SerializeField] float rotateSpeed;
-    [SerializeField] float mChragePow;
+    [SerializeField] public float mChragePow;
     [SerializeField] float moveForce;
     [SerializeField] float maxSpeed;
     [SerializeField] float drag;  // 抵抗（慣性調整）
@@ -20,8 +20,9 @@ public class Player : MonoBehaviour
     InputAction charge;
     float bTime;
     float cTime;
-    float chargePow;
+   public float chargePow;
     Vector3 moveDir;
+    public Vector3 moveDirFromVelocity;
     public LayerMask collisionMask;
     public Gamepad assignedGamepad;
     enum State
@@ -125,14 +126,14 @@ public class Player : MonoBehaviour
                     return;
                 }
                 rb.linearVelocity *= cDrag;
-                chargePow += Time.deltaTime*60;
+                chargePow += Time.deltaTime*40;
                 if(chargePow>=mChragePow) { chargePow=mChragePow; }
                 if(!charge.IsPressed()) { state = State.Fire;}
                 //if(fire.IsPressed()) { state=State.Fire; }
                 break;
             case State.Fire:
                 Vector3 velocity = rb.linearVelocity;
-                Vector3 moveDirFromVelocity = velocity.magnitude > 0.01f ? velocity.normalized : transform.forward;
+                moveDirFromVelocity = velocity.magnitude > 0.01f ? velocity.normalized : transform.forward;
                 rb.AddForce(moveDirFromVelocity * chargePow, ForceMode.VelocityChange);
                 chargePow = 0;
                 state = State.Bound;
