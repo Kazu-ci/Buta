@@ -18,7 +18,6 @@ public class Player : MonoBehaviour
     Rigidbody rb;
     InputAction move;
     InputAction charge;
-    InputAction fire;
     float bTime;
     float cTime;
     float chargePow;
@@ -46,8 +45,6 @@ public class Player : MonoBehaviour
         rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
         move = action.actions["Move"];
         charge = action.actions["Charge"];
-        fire = action.actions["Fire"];
-        // rb.AddForce(transform.forward * 10000);
     }
 
     // Update is called once per frame
@@ -130,8 +127,8 @@ public class Player : MonoBehaviour
                 rb.linearVelocity *= cDrag;
                 chargePow += Time.deltaTime*60;
                 if(chargePow>=mChragePow) { chargePow=mChragePow; }
-                if(!charge.IsPressed()) { state = State.Idle; chargePow = 0; }
-                if(fire.IsPressed()) { state=State.Fire; }
+                if(!charge.IsPressed()) { state = State.Fire;}
+                //if(fire.IsPressed()) { state=State.Fire; }
                 break;
             case State.Fire:
                 Vector3 velocity = rb.linearVelocity;
