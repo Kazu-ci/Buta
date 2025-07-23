@@ -1,13 +1,8 @@
 diff a/Butaball/Assets/Scenes/Title.unity b/Butaball/Assets/Scenes/Title.unity	(rejected hunks)
-@@ -368,7 +368,11 @@
-     - target: {fileID: 3352083995647513143, guid: e2ad4f3bed876b547bdac944e13631a8, type: 3}
-       propertyPath: 'm_Materials.Array.data[0]'
+@@ -708,6 +708,9 @@
        value: 
-+<<<<<<< HEAD
+ 
        objectReference: {fileID: 2100000, guid: b16cb8713197b06409908423ed627b00, type: 2}
-+=======
-+      objectReference: {fileID: 2100000, guid: a006a739e277e7e43919e37f39653f46, type: 2}
-+>>>>>>> noko
-     - target: {fileID: 8574026326515932260, guid: e2ad4f3bed876b547bdac944e13631a8, type: 3}
-       propertyPath: m_Material
-       value: 
+     m_RemovedComponents: []
+     m_RemovedGameObjects: []
+     m_AddedGameObjects: []
