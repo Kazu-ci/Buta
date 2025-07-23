@@ -1,4 +1,5 @@
-﻿using Unity.VisualScripting;
+﻿using Mono.Cecil;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
@@ -21,7 +22,6 @@ public class Player : MonoBehaviour
     float cTime;
     float chargePow;
     Vector3 moveDir;
-    float speed;
     public LayerMask collisionMask;
     public Gamepad assignedGamepad;
     enum State
@@ -29,6 +29,7 @@ public class Player : MonoBehaviour
         Idle,
         Move,
         Brake,
+        Fire,
         Bound,
         Die,
     }
@@ -54,13 +55,13 @@ public class Player : MonoBehaviour
     }
     private void FixedUpdate()
     {
+        CollisionPredictionAndReflect();
         if (state != State.Bound)
         {
             Angle();
             Move();
         }
-        CollisionPredictionAndReflect();
-        Debug.Log(state);
+        Debug.Log(chargePow);
     }
     void Think()
     {
@@ -68,7 +69,6 @@ public class Player : MonoBehaviour
         {
             if (!charge.IsPressed())
             {
-                state = State.Bound;
                 rb.linearDamping = drag;
             }
             return;
@@ -81,7 +81,7 @@ public class Player : MonoBehaviour
                 break;
             case State.Move:
                 if (charge.IsPressed()) { state = State.Brake; }
-                if(move.ReadValue<Vector2>()==new Vector2(0,0)) { state = State.Idle;speed = 0; }
+                if(move.ReadValue<Vector2>()==new Vector2(0,0)) { state = State.Idle; }
                 break;
             case State.Brake:
                 if (!charge.IsPressed()) { state = State.Bound; }
@@ -125,6 +125,17 @@ public class Player : MonoBehaviour
                     return;
                 }
                 rb.linearVelocity *= cDrag;
+                chargePow += Time.deltaTime*60;
+                if(chargePow>=mChragePow) { chargePow=mChragePow; }
+                if(!charge.IsPressed()) { state = State.Fire;}
+                //if(fire.IsPressed()) { state=State.Fire; }
+                break;
+            case State.Fire:
+                Vector3 velocity = rb.linearVelocity;
+                Vector3 moveDirFromVelocity = velocity.magnitude > 0.01f ? velocity.normalized : transform.forward;
+                rb.AddForce(moveDirFromVelocity * chargePow, ForceMode.VelocityChange);
+                chargePow = 0;
+                state = State.Bound;
                 break;
             case State.Bound:
                 Debug.Log("Boundだよ");

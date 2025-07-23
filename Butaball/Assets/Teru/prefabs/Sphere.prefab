@@ -183,7 +183,7 @@ MonoBehaviour:
   accelaration: 2
   action: {fileID: 9142010737593287873}
   rotateSpeed: 10
-  mChragePow: 500
+  mChragePow: 300
   moveForce: 20
   maxSpeed: 50
   drag: 0.8
