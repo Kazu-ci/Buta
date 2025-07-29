@@ -132,7 +132,7 @@ public class Player : MonoBehaviour
                 break;
             case State.Fire:
                 Vector3 velocity = rb.linearVelocity;
-                Vector3 moveDirFromVelocity = velocity.magnitude > 0.01f ? velocity.normalized : transform.forward;
+                Vector3 moveDirFromVelocity = velocity.normalized;
                 rb.AddForce(moveDirFromVelocity * chargePow, ForceMode.VelocityChange);
                 chargePow = 0;
                 state = State.Bound;
@@ -173,11 +173,6 @@ public class Player : MonoBehaviour
         moveDir = camForward * v + camRight * h;
         moveDir.Normalize();
 
-        if (moveDir != Vector3.zero)
-        {
-            
-            transform.forward = Vector3.Slerp(transform.forward, moveDir, Time.deltaTime * rotateSpeed);
-        }
     }
   
 
