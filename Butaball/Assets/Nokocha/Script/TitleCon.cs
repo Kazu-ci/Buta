@@ -1,23 +1,49 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using System.Collections;
 
 public class TitleCon : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    
+    public AudioSource audioSource;
+    public AudioClip seClip;
+    public Image fadeImage;
+    public string nextSceneName = "StageSelect";
+    public float fadeDuration = 1f;
+
+    public void OnButtonPressed()
     {
-        
+        StartCoroutine(TransitionRouTime());
     }
 
-    // Update is called once per frame
-    void Update()
+    private IEnumerator TransitionRouTime()
     {
-        EndGame();
+        if(audioSource && seClip)
+        {
+            audioSource.PlayOneShot(seClip);
+        }
+
+        yield return StartCoroutine(FadeOut());
+
+        SceneManager.LoadScene(nextSceneName);
     }
-    public void OnButtonClick()
+
+    IEnumerator FadeOut()
     {
-        SceneManager.LoadScene("StageSelect");
+        float t = 0;
+        Color color = fadeImage.color;
+
+        while(t <  fadeDuration)
+        {
+            t += Time.deltaTime;
+            color.a = Mathf.Clamp01(t / fadeDuration);
+            fadeImage.color = color;
+            yield return null;
+        }
+
     }
+
     private void EndGame()
     {
         //Esc‚ª‰Ÿ‚³‚ê‚½Žž
@@ -32,4 +58,11 @@ public class TitleCon : MonoBehaviour
         }
 
     }
+
+    // Update is called once per frame
+    void Update()
+    {
+        EndGame();
+    }
+   
 }
