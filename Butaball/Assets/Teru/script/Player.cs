@@ -21,6 +21,7 @@ public class Player : MonoBehaviour
     float bTime;
     float cTime;
     float chargePow;
+    GameManager gameManager;
     Vector3 moveDir;
     public LayerMask collisionMask;
     public Gamepad assignedGamepad;
@@ -39,6 +40,7 @@ public class Player : MonoBehaviour
     {
         state=State.Idle;
         rb = GetComponent<Rigidbody>();
+        gameManager = FindObjectOfType<GameManager>();
         rb.linearDamping = drag;   // 慣性の減衰を設定
         rb.angularDamping = 0f;
         rb.interpolation = RigidbodyInterpolation.Interpolate;
@@ -50,11 +52,17 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
+        if (gameManager == null || gameManager.GetGameState() != GameManager.State.Ingame)
+            return; // ゲームが始まっていないので入力など処理しない
+
         Think();
 
     }
     private void FixedUpdate()
     {
+        if (gameManager == null || gameManager.GetGameState() != GameManager.State.Ingame)
+            return; // ゲームが始まっていないので物理処理もしない
+
         CollisionPredictionAndReflect();
         if (state != State.Bound)
         {
@@ -205,5 +213,5 @@ public class Player : MonoBehaviour
             Debug.DrawRay(transform.position, direction * rayLength, Color.green, 0.1f);
         }
     }
-  
+    public float GetChargePow() => chargePow;
 }
