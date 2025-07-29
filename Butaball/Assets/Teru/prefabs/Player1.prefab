@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 6930799639483410040}
   m_Layer: 0
   m_Name: Player1
-  m_TagString: Untagged
+  m_TagString: player1
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -189,8 +189,6 @@ MonoBehaviour:
   maxSpeed: 25
   drag: 0.8
   cDrag: 0.95
-  chargePow: 0
-  moveDirFromVelocity: {x: 0, y: 0, z: 0}
   collisionMask:
     serializedVersion: 2
     m_Bits: 4294967295

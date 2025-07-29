@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class ChargeUIManager : MonoBehaviour
-{
+{/*
   [SerializeField]  Player player;
   [SerializeField]  Image chargebar;
     
@@ -19,5 +19,5 @@ public class ChargeUIManager : MonoBehaviour
 
 
         chargebar.fillAmount = player.chargePow;
-    }
+    }*/
 }

@@ -17,7 +17,7 @@ public class effect : MonoBehaviour
     }
     void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("player1"))
         {
             if (boingEffectPrefab != null)
             {

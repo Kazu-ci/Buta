@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 3
   tags:
   - under
+  - player1
+  - player2
   layers:
   - Default
   - TransparentFX
