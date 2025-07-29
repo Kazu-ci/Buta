@@ -11,6 +11,15 @@ public class SceneLoaderWithFade : MonoBehaviour
     public Image fadeImage;
     public float fadeDuration = 1f;
 
+    [Header("SE Settings")]
+    public AudioClip fallSE;
+    private AudioSource audioSource;
+
+    private void Start()
+    {
+        audioSource = gameObject.AddComponent<AudioSource>();
+    }
+
     private void Awake()
     {
         if (Instance == null)
@@ -26,6 +35,12 @@ public class SceneLoaderWithFade : MonoBehaviour
 
     public void LoadSceneWithFade(string sceneName)
     {
+
+        if (fallSE != null)
+        {
+            audioSource.PlayOneShot(fallSE);
+        }
+
         StartCoroutine(FadeAndLoad(sceneName));
     }
 

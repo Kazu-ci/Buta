@@ -19,10 +19,12 @@ public class dead : MonoBehaviour
     {
         if(other.gameObject.tag =="player1")
         {
+            Debug.Log("Dead");
                 player1.alive1 = false;
         }
         if (other.gameObject.tag == "player2")
         {
+            Debug.Log("Dead");
             player1.alive1 = true;
             isPlayerDead = true;
             //SceneManager.LoadScene("Result");
