@@ -14,6 +14,7 @@ public class Player : MonoBehaviour
     [SerializeField] float maxSpeed;
     [SerializeField] float drag;  // 抵抗（慣性調整）
     [SerializeField] float cDrag;  // 抵抗（慣性調整）
+    [SerializeField] private ParticleSystem chargeEffect;
     float h,v;
     Rigidbody rb;
     InputAction move;
@@ -21,6 +22,7 @@ public class Player : MonoBehaviour
     float bTime;
     float cTime;
     float chargePow;
+    GameManager gameManager;
     Vector3 moveDir;
     public LayerMask collisionMask;
     public Gamepad assignedGamepad;
@@ -39,6 +41,7 @@ public class Player : MonoBehaviour
     {
         state=State.Idle;
         rb = GetComponent<Rigidbody>();
+        gameManager = FindObjectOfType<GameManager>();
         rb.linearDamping = drag;   // 慣性の減衰を設定
         rb.angularDamping = 0f;
         rb.interpolation = RigidbodyInterpolation.Interpolate;
@@ -50,11 +53,17 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
+        if (gameManager == null || gameManager.GetGameState() != GameManager.State.Ingame)
+            return; // ゲームが始まっていないので入力など処理しない
+
         Think();
 
     }
     private void FixedUpdate()
     {
+        if (gameManager == null || gameManager.GetGameState() != GameManager.State.Ingame)
+            return; // ゲームが始まっていないので物理処理もしない
+
         CollisionPredictionAndReflect();
         if (state != State.Bound)
         {
@@ -62,6 +71,22 @@ public class Player : MonoBehaviour
             Move();
         }
         Debug.Log(chargePow);
+    }
+
+    void LateUpdate()
+    {
+        if (chargeEffect == null) return;
+
+        ParticleSystem.Particle[] particles = new ParticleSystem.Particle[chargeEffect.main.maxParticles];
+        int count = chargeEffect.GetParticles(particles);
+
+        for (int i = 0; i < count; i++)
+        {
+            Vector3 dirToCenter = (transform.position - particles[i].position).normalized;
+            particles[i].velocity = dirToCenter * 3f; // 中心に向けて吸引（速度3）
+        }
+
+        chargeEffect.SetParticles(particles, count);
     }
     void Think()
     {
@@ -126,11 +151,26 @@ public class Player : MonoBehaviour
                 }
                 rb.linearVelocity *= cDrag;
                 chargePow += Time.deltaTime*60;
-                if(chargePow>=mChragePow) { chargePow=mChragePow; }
-                if(!charge.IsPressed()) { state = State.Fire;}
+                if (chargePow >= mChragePow) {
+                    chargePow = mChragePow;
+                    if (!chargeEffect.isPlaying)
+                    {
+                        chargeEffect.Play(); 
+                    }
+                
+                }
+                if(!charge.IsPressed()) {
+                    state = State.Fire;
+                    if (chargeEffect.isPlaying)
+                    {
+                        chargeEffect.Stop();
+                    }
+                }
                 //if(fire.IsPressed()) { state=State.Fire; }
                 break;
             case State.Fire:
+                if (chargeEffect.isPlaying)
+                    chargeEffect.Stop();
                 Vector3 velocity = rb.linearVelocity;
                 Vector3 moveDirFromVelocity = velocity.normalized;
                 rb.AddForce(moveDirFromVelocity * chargePow, ForceMode.VelocityChange);
@@ -144,6 +184,8 @@ public class Player : MonoBehaviour
                 break;
 
             case State.Die:
+                if (chargeEffect.isPlaying)
+                    chargeEffect.Stop();
                 // 動かないようにゼロ代入など
                 rb.linearVelocity = Vector3.zero;
                 break;
@@ -205,5 +247,5 @@ public class Player : MonoBehaviour
             Debug.DrawRay(transform.position, direction * rayLength, Color.green, 0.1f);
         }
     }
-  
+    public float GetChargePow() => chargePow;
 }
