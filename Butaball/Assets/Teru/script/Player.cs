@@ -149,20 +149,23 @@ public class Player : MonoBehaviour
                 {
                     return;
                 }
+                if (!chargeEffect.isPlaying)
+                {
+                    chargeEffect.gameObject.SetActive(true);
+                    chargeEffect.Play();
+                }
                 rb.linearVelocity *= cDrag;
                 chargePow += Time.deltaTime*60;
                 if (chargePow >= mChragePow) {
                     chargePow = mChragePow;
-                    if (!chargeEffect.isPlaying)
-                    {
-                        chargeEffect.Play(); 
-                    }
+                    
                 
                 }
                 if(!charge.IsPressed()) {
                     state = State.Fire;
                     if (chargeEffect.isPlaying)
                     {
+                        chargeEffect.gameObject.SetActive(false);
                         chargeEffect.Stop();
                     }
                 }
