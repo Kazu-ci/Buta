@@ -6227,7 +6227,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 457590038976630901, guid: 83c0797904f10cb4698bb97e2680dbce, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1.37
+      value: 1.283
       objectReference: {fileID: 0}
     - target: {fileID: 457590038976630901, guid: 83c0797904f10cb4698bb97e2680dbce, type: 3}
       propertyPath: m_LocalRotation.w
@@ -6419,6 +6419,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player2
       objectReference: {fileID: 0}
+    - target: {fileID: 1448699004713839328, guid: 7f3046e7b0f70d04591faef7f8ebf4e2, type: 3}
+      propertyPath: m_TagString
+      value: Player2
+      objectReference: {fileID: 0}
     - target: {fileID: 2609179071734717598, guid: 7f3046e7b0f70d04591faef7f8ebf4e2, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.1
@@ -6483,6 +6487,10 @@ PrefabInstance:
       propertyPath: chargeEffect
       value: 
       objectReference: {fileID: 542577079}
+    - target: {fileID: 7483462043228833848, guid: 7f3046e7b0f70d04591faef7f8ebf4e2, type: 3}
+      propertyPath: m_Constraints
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
