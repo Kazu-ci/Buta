@@ -19,7 +19,7 @@ public class result : MonoBehaviour
             ChangeColor(p2, Color.blue);
             ChangeColor(p1, Color.red);
         }
-        else
+        else if(player1.alive1 == true)
         {
             ChangeColor(p2, Color.red);
             ChangeColor(p1, Color.blue);

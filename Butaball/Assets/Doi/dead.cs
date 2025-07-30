@@ -7,7 +7,7 @@ public class dead : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-     
+        isPlayerDead = false;
     }
 
     // Update is called once per frame
@@ -17,22 +17,21 @@ public class dead : MonoBehaviour
     }
     void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.tag =="player1")
+        if (other.CompareTag("player1"))
         {
             Debug.Log("Dead");
-                player1.alive1 = false;
+            player1.alive1 = false;
+            isPlayerDead = true;
         }
-        if (other.gameObject.tag == "player2")
+        else
         {
             Debug.Log("Dead");
+            Debug.Log("p@layer2");
             player1.alive1 = true;
             isPlayerDead = true;
             //SceneManager.LoadScene("Result");
         }
-        if (player1.alive1==false)
-        {
-            isPlayerDead=true;
-            //SceneManager.LoadScene("Result");
-        }
+        
     }
 }
+
