@@ -12,6 +12,11 @@ public class TitleCon : MonoBehaviour
     public string nextSceneName = "StageSelect";
     public float fadeDuration = 1f;
 
+
+    void Start()
+    {
+        Application.targetFrameRate = 60;
+    }
     public void OnButtonPressed()
     {
         StartCoroutine(TransitionRouTime());
