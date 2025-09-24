@@ -6,6 +6,7 @@ using UnityEngine.UIElements;
 
 public class Player : MonoBehaviour
 {
+    EStateMachine<Player> stateMachine;
     [SerializeField] float accelaration;
     [SerializeField] PlayerInput action;
     [SerializeField] float rotateSpeed;
@@ -48,29 +49,25 @@ public class Player : MonoBehaviour
         rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
         move = action.actions["Move"];
         charge = action.actions["Charge"];
+        stateMachine = new EStateMachine<Player>(this);
+        stateMachine.Add<IdleState>((int)State.Idle);
+        stateMachine.Add<MoveState>((int)State.Move);
+        stateMachine.Add<BreakState>((int)State.Brake);
+        stateMachine.Add<FireState>((int)State.Fire);
+        stateMachine.Add<BoundState>((int)State.Bound);
+        stateMachine.OnStart((int)State.Idle);
     }
 
     // Update is called once per frame
-    private void Update()
-    {
-        if (gameManager == null || gameManager.GetGameState() != GameManager.State.Ingame)
-            return; // ゲームが始まっていないので入力など処理しない
 
-        Think();
-
-    }
     private void FixedUpdate()
     {
         if (gameManager == null || gameManager.GetGameState() != GameManager.State.Ingame)
             return; // ゲームが始まっていないので物理処理もしない
 
         CollisionPredictionAndReflect();
-        if (state != State.Bound)
-        {
-            Angle();
-            Move();
-        }
-        Debug.Log(chargePow);
+        Angle();
+        stateMachine.OnUpdate();
     }
 
     void LateUpdate()
@@ -88,111 +85,225 @@ public class Player : MonoBehaviour
 
         chargeEffect.SetParticles(particles, count);
     }
-    void Think()
+    //void Think()
+    //{
+    //    if (state == State.Brake)
+    //    {
+    //        if (!charge.IsPressed())
+    //        {
+    //            rb.linearDamping = drag;
+    //        }
+    //        return;
+    //    }
+    //    switch (state)
+    //    {
+    //        case State.Idle:
+    //            if (move.ReadValue<Vector2>()!=new Vector2(0,0) ){ state = State.Move; }
+    //            if (charge.IsPressed()) { state = State.Brake; }
+    //            break;
+    //        case State.Move:
+    //            if (charge.IsPressed()) { state = State.Brake; }
+    //            if(move.ReadValue<Vector2>()==new Vector2(0,0)) { state = State.Idle; }
+    //            break;
+    //        case State.Brake:
+    //            if (!charge.IsPressed()) { state = State.Bound; }
+    //            break;
+    //        case State.Bound:
+    //            bTime += Time.deltaTime;
+    //            if (bTime >= 0.5f) 
+    //            {
+    //                if (rb.linearVelocity.magnitude < 0.1f)
+    //                {
+    //                    state = State.Idle;  // 停止していればIdleへ
+    //                }
+    //                else
+    //                {
+    //                    state = State.Move;  // 動いていればMoveへ戻す
+    //                }
+    //            }
+    //            break;
+    //        case State.Die:
+    //            break;
+    //    }
+    //}
+    //private void Move()
+    //{
+    //    switch (state)
+    //    {
+    //        case State.Move:
+    //            if (move.activeControl?.device != assignedGamepad &&
+    //        charge.activeControl?.device != assignedGamepad)
+    //            {
+    //                Debug.Log("nun");
+    //                return;
+    //            }
+    //            OnMove();
+    //            break;
+
+    //        case State.Brake:
+    //            if (move.activeControl?.device != assignedGamepad &&
+    //        charge.activeControl?.device != assignedGamepad)
+    //            {
+    //                return;
+    //            }
+    //            if (!chargeEffect.isPlaying)
+    //            {
+    //                chargeEffect.gameObject.SetActive(true);
+    //                chargeEffect.Play();
+    //            }
+    //            rb.linearVelocity *= cDrag;
+    //            chargePow += Time.deltaTime*60;
+    //            if (chargePow >= mChragePow) {
+    //                chargePow = mChragePow;
+                    
+                
+    //            }
+    //            if(!charge.IsPressed()) {
+    //                state = State.Fire;
+    //                if (chargeEffect.isPlaying)
+    //                {
+    //                    chargeEffect.gameObject.SetActive(false);
+    //                    chargeEffect.Stop();
+    //                }
+    //            }
+    //            //if(fire.IsPressed()) { state=State.Fire; }
+    //            break;
+    //        case State.Fire:
+    //            if (chargeEffect.isPlaying)
+    //                chargeEffect.Stop();
+    //            Vector3 velocity = rb.linearVelocity;
+    //            Vector3 moveDirFromVelocity = velocity.normalized;
+    //            rb.AddForce(moveDirFromVelocity * chargePow, ForceMode.VelocityChange);
+    //            chargePow = 0;
+    //            state = State.Bound;
+    //            break;
+    //        case State.Bound:
+    //            Debug.Log("Boundだよ");
+    //            bTime += Time.deltaTime;
+    //            // 反射中は速度を直接操作しない（物理演算に任せる）
+    //            break;
+
+    //        case State.Die:
+    //            if (chargeEffect.isPlaying)
+    //                chargeEffect.Stop();
+    //            // 動かないようにゼロ代入など
+    //            rb.linearVelocity = Vector3.zero;
+    //            break;
+    //    }
+    //}
+    private class IdleState : EStateMachine<Player>.StateBase
     {
-        if (state == State.Brake)
+
+        public override void OnUpdate()
         {
-            if (!charge.IsPressed())
-            {
-                rb.linearDamping = drag;
-            }
-            return;
+            if (Owner.move.ReadValue<Vector2>() != new Vector2(0, 0)) { StateMachine.ChangeState((int)State.Move); }
+            if (Owner.charge.IsPressed()) { StateMachine.ChangeState((int)State.Brake); }
         }
-        switch (state)
+        public override void OnEnd()
         {
-            case State.Idle:
-                if (move.ReadValue<Vector2>()!=new Vector2(0,0) ){ state = State.Move; }
-                if (charge.IsPressed()) { state = State.Brake; }
-                break;
-            case State.Move:
-                if (charge.IsPressed()) { state = State.Brake; }
-                if(move.ReadValue<Vector2>()==new Vector2(0,0)) { state = State.Idle; }
-                break;
-            case State.Brake:
-                if (!charge.IsPressed()) { state = State.Bound; }
-                break;
-            case State.Bound:
-                bTime += Time.deltaTime;
-                if (bTime >= 0.5f) 
-                {
-                    if (rb.linearVelocity.magnitude < 0.1f)
-                    {
-                        state = State.Idle;  // 停止していればIdleへ
-                    }
-                    else
-                    {
-                        state = State.Move;  // 動いていればMoveへ戻す
-                    }
-                }
-                break;
-            case State.Die:
-                break;
+            
         }
     }
-    private void Move()
+    private class MoveState : EStateMachine<Player>.StateBase
     {
-        switch (state)
+        public override void OnUpdate()
         {
-            case State.Move:
-                if (move.activeControl?.device != assignedGamepad &&
-            charge.activeControl?.device != assignedGamepad)
+            if (Owner.charge.IsPressed()) { StateMachine.ChangeState((int)State.Brake); }
+            if(Owner.move.ReadValue<Vector2>()==new Vector2(0,0)) { StateMachine.ChangeState((int)State.Idle); }
+            if (Owner.move.activeControl?.device != Owner.assignedGamepad &&
+            Owner.charge.activeControl?.device != Owner.assignedGamepad)
                 {
                     Debug.Log("nun");
                     return;
                 }
-                OnMove();
-                break;
-
-            case State.Brake:
-                if (move.activeControl?.device != assignedGamepad &&
-            charge.activeControl?.device != assignedGamepad)
-                {
-                    return;
-                }
-                if (!chargeEffect.isPlaying)
-                {
-                    chargeEffect.gameObject.SetActive(true);
-                    chargeEffect.Play();
-                }
-                rb.linearVelocity *= cDrag;
-                chargePow += Time.deltaTime*60;
-                if (chargePow >= mChragePow) {
-                    chargePow = mChragePow;
-                    
-                
-                }
-                if(!charge.IsPressed()) {
-                    state = State.Fire;
-                    if (chargeEffect.isPlaying)
-                    {
-                        chargeEffect.gameObject.SetActive(false);
-                        chargeEffect.Stop();
-                    }
-                }
-                //if(fire.IsPressed()) { state=State.Fire; }
-                break;
-            case State.Fire:
-                if (chargeEffect.isPlaying)
-                    chargeEffect.Stop();
-                Vector3 velocity = rb.linearVelocity;
-                Vector3 moveDirFromVelocity = velocity.normalized;
-                rb.AddForce(moveDirFromVelocity * chargePow, ForceMode.VelocityChange);
-                chargePow = 0;
-                state = State.Bound;
-                break;
-            case State.Bound:
-                Debug.Log("Boundだよ");
-                bTime += Time.deltaTime;
-                // 反射中は速度を直接操作しない（物理演算に任せる）
-                break;
-
-            case State.Die:
-                if (chargeEffect.isPlaying)
-                    chargeEffect.Stop();
-                // 動かないようにゼロ代入など
-                rb.linearVelocity = Vector3.zero;
-                break;
+             Owner.OnMove();
         }
+    }
+    private class BreakState : EStateMachine<Player>.StateBase
+    {
+
+        public override void OnUpdate()
+        {
+            if (!Owner.charge.IsPressed()) { StateMachine.ChangeState((int)State.Bound); }
+            if (Owner.move.activeControl?.device != Owner.assignedGamepad &&
+          Owner.charge.activeControl?.device != Owner.assignedGamepad)
+              {
+                  return;
+              }
+              if (!Owner.chargeEffect.isPlaying)
+              {
+                  Owner.chargeEffect.gameObject.SetActive(true);
+                  Owner.chargeEffect.Play();
+              }
+              Owner.rb.linearVelocity *= Owner.cDrag;
+              Owner.chargePow += Time.deltaTime*60;
+              if (Owner.chargePow >= Owner.mChragePow) {
+                  Owner.chargePow = Owner.mChragePow;
+              }
+        }
+        public override void OnEnd()
+        {
+
+            Owner.rb.linearDamping = Owner.drag;
+        }
+
+    }
+    private class BoundState : EStateMachine<Player>.StateBase
+    {
+        public override void OnStart()
+        {
+
+        }
+        public override void OnUpdate()
+        {
+            Owner.bTime += Time.deltaTime;
+            if (Owner.bTime >= 0.5f)
+            {
+                 if (Owner.rb.linearVelocity.magnitude < 0.1f)
+                 {
+                     StateMachine.ChangeState((int)State.Idle);  // 停止していればIdleへ
+                 }
+                 else
+                 {
+                     StateMachine.ChangeState((int)State.Move);  // 動いていればMoveへ戻す
+                 }
+             }
+        }
+        public override void OnEnd()
+        {
+
+        }
+    }
+    private class FireState : EStateMachine<Player>.StateBase
+    {
+        public override void OnStart()
+        {
+
+        }
+        public override void OnUpdate()
+        {
+            if (Owner.chargeEffect.isPlaying)
+                Owner.chargeEffect.Stop();
+            Vector3 velocity = Owner.rb.linearVelocity;
+            Vector3 moveDirFromVelocity = velocity.normalized;
+            Owner.rb.AddForce(moveDirFromVelocity * Owner.chargePow, ForceMode.VelocityChange);
+            Owner.chargePow = 0;
+            StateMachine.ChangeState((int)State.Bound);
+        }
+        public override void OnEnd()
+        {
+
+        }
+    }
+    private class DieState : EStateMachine<Player>.StateBase
+    {
+
+        public override void OnUpdate()
+        {
+            if (Owner.chargeEffect.isPlaying) { Owner.chargeEffect.Stop(); }
+            Owner.rb.linearVelocity = Vector3.zero;
+        }
+
     }
     public void OnMove()
     {
@@ -201,7 +312,7 @@ public class Player : MonoBehaviour
             // 最大速度制限
             if (rb.linearVelocity.magnitude < maxSpeed)
             {
-                rb.AddForce(moveDir * moveForce);
+                rb.AddForce(moveDir * moveForce, ForceMode.Acceleration);
             }
         }
     }
