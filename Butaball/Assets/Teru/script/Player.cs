@@ -52,7 +52,7 @@ public class Player : MonoBehaviour
         stateMachine = new EStateMachine<Player>(this);
         stateMachine.Add<IdleState>((int)State.Idle);
         stateMachine.Add<MoveState>((int)State.Move);
-        stateMachine.Add<BreakState>((int)State.Brake);
+        stateMachine.Add<ChargeState>((int)State.Brake);
         stateMachine.Add<FireState>((int)State.Fire);
         stateMachine.Add<BoundState>((int)State.Bound);
         stateMachine.OnStart((int)State.Idle);
@@ -219,7 +219,7 @@ public class Player : MonoBehaviour
              Owner.OnMove();
         }
     }
-    private class BreakState : EStateMachine<Player>.StateBase
+    private class ChargeState : EStateMachine<Player>.StateBase
     {
 
         public override void OnUpdate()
@@ -261,11 +261,11 @@ public class Player : MonoBehaviour
             {
                  if (Owner.rb.linearVelocity.magnitude < 0.1f)
                  {
-                     StateMachine.ChangeState((int)State.Idle);  // 停止していればIdleへ
+                     StateMachine.ChangeState((int)State.Idle);  //停止していればIdleへ
                  }
                  else
                  {
-                     StateMachine.ChangeState((int)State.Move);  // 動いていればMoveへ戻す
+                     StateMachine.ChangeState((int)State.Move);  //動いていればMoveへ戻す
                  }
              }
         }
