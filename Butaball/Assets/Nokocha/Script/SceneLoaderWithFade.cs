@@ -25,7 +25,7 @@ public class SceneLoaderWithFade : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject); // シーンをまたいで生き残る
+            DontDestroyOnLoad(gameObject); //シーンをまたいで生き残る
         }
         else
         {
@@ -50,7 +50,7 @@ public class SceneLoaderWithFade : MonoBehaviour
 
         SceneManager.LoadScene(sceneName);
 
-        yield return new WaitForSeconds(0.1f); // 読み込み待機（任意）
+        yield return new WaitForSeconds(0.1f); //読み込み待機
         yield return StartCoroutine(FadeIn());
     }
 
