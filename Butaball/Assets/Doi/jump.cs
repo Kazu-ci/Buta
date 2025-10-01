@@ -31,7 +31,8 @@ public class PlayerJump : MonoBehaviour
     {
         // y�����̑��x�����Z�b�g���Ă����ɗ͂�������
         rb.linearVelocity = new Vector3(0, 0f,0);
-        rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        rb.linearVelocity = new Vector3(0, jumpForce, 0);
+        
     }
     void Gravity()
     {
