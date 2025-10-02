@@ -15,6 +15,7 @@ public class PlayGuidCon : MonoBehaviour
     public Image title;
     public Image start;
     public Image close;
+    public Image guid;
 
     [Header("ƒ{ƒ^ƒ“Ý’è")]
     public Button stgbtn;
@@ -50,6 +51,7 @@ public class PlayGuidCon : MonoBehaviour
         yield return StartCoroutine(TitleFadeOut());
         yield return StartCoroutine(StartFadeOut());
         yield return StartCoroutine(CloseFadeIn());
+        yield return StartCoroutine(PlayGuidFadeOut());
         clzbtn.interactable = true;
         stgbtn.interactable = false;
         opnbtn.interactable = false;
@@ -61,6 +63,7 @@ public class PlayGuidCon : MonoBehaviour
         yield return StartCoroutine(BackFadeOut());
         yield return StartCoroutine(TitleFadeIn());
         yield return StartCoroutine(StartFadeIn());
+        yield return StartCoroutine(PlayGuidFadeIn());
         clzbtn.interactable = false;
         opnbtn.interactable = true;
         stgbtn.interactable = true;
@@ -178,6 +181,35 @@ public class PlayGuidCon : MonoBehaviour
             t += Time.deltaTime;
             color.a = Mathf.Clamp01(t / FadeDuration);
             start.color = color;
+            yield return null;
+        }
+
+    }
+
+    private IEnumerator PlayGuidFadeOut()
+    {
+        float t = FadeDuration;
+        Color color = guid.color;
+
+        while (t > 0f)
+        {
+            t -= Time.deltaTime;
+            color.a = Mathf.Clamp01(t / FadeDuration);
+            guid.color = color;
+            yield return null;
+        }
+    }
+
+    private IEnumerator PlayGuidFadeIn()
+    {
+        float t = 0f;
+        Color color = guid.color;
+
+        while (t < FadeDuration)
+        {
+            t += Time.deltaTime;
+            color.a = Mathf.Clamp01(t / FadeDuration);
+            guid.color = color;
             yield return null;
         }
 
