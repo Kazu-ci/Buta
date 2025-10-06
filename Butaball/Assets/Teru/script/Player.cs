@@ -130,6 +130,12 @@ public class Player : MonoBehaviour
         }
         public override void OnUpdate()
         {
+            Owner.rb.linearVelocity *= Owner.cDrag;
+            Owner.chargePow += Time.deltaTime * 20;
+            if (Owner.chargePow >= Owner.mChragePow)
+            {
+                Owner.chargePow = Owner.mChragePow;
+            }
             if (Owner.move.activeControl?.device != Owner.assignedGamepad &&
           Owner.charge.activeControl?.device != Owner.assignedGamepad)
             {
@@ -141,16 +147,14 @@ public class Player : MonoBehaviour
                   Owner.chargeEffect.gameObject.SetActive(true);
                   Owner.chargeEffect.Play();
               }
-              Owner.rb.linearVelocity *= Owner.cDrag;
-              Owner.chargePow += Time.deltaTime*20;
-              if (Owner.chargePow >= Owner.mChragePow) {
-                  Owner.chargePow = Owner.mChragePow;
-              }
+              
+             
             Owner.Angle();
             if (Owner.moveDir.sqrMagnitude > 0.01f)
             {
                 Owner.UpdateRotation(Owner.moveDir);
             }
+            if (Owner.charge.IsPressed()) { StateMachine.ChangeState((int)State.Charge); }
         }
         public override void OnEnd()
         {
@@ -204,8 +208,6 @@ public class Player : MonoBehaviour
                 Owner.chargeEffect.Stop();
 
             Vector3 fireDirection = Owner.moveDir;
-
-            // moveDirが0ベクトル（入力なし）の場合は現在のvelocity方向にフォールバック
             if (fireDirection.sqrMagnitude < 0.01f)
             {
                 fireDirection = Owner.rb.linearVelocity.normalized;
