@@ -2066,11 +2066,11 @@ RectTransform:
   m_Children:
   - {fileID: 359972287}
   - {fileID: 459989223}
-  - {fileID: 1917877654}
-  - {fileID: 664466582}
   - {fileID: 1064972845}
   - {fileID: 882496603}
   - {fileID: 855950403}
+  - {fileID: 664466582}
+  - {fileID: 1917877654}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -4491,7 +4491,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   audioSource: {fileID: 1829590348}
   seClip: {fileID: 8300000, guid: 6da21390269fd1241a1266f577b11992, type: 3}
-  fadeImage: {fileID: 0}
+  fadeImage: {fileID: 1917877655}
   nextSceneName: StageSelect
   fadeDuration: 1
 --- !u!4 &1539995139
@@ -5261,6 +5261,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 6582341993515545117, guid: 496016e34dcbe9649a872a1ca1b35131, type: 3}
   m_PrefabInstance: {fileID: 6188173483576358579}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1917877655 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 188104531165307847, guid: 496016e34dcbe9649a872a1ca1b35131, type: 3}
+  m_PrefabInstance: {fileID: 6188173483576358579}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1932500812 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4454720211723526585, guid: 52cc71e3c8724e54e970737f6d0bca91, type: 3}
