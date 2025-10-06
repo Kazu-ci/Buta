@@ -36,11 +36,9 @@ public class Player : MonoBehaviour
         Bound,
         Die,
     }
-    State state;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        state=State.Idle;
         rb = GetComponent<Rigidbody>();
         gameManager = FindObjectOfType<GameManager>();
         rb.linearDamping = drag;   // 慣性の減衰を設定
@@ -110,13 +108,13 @@ public class Player : MonoBehaviour
         }
         public override void OnUpdate()
         {
+            if (Owner.charge.IsPressed()) { StateMachine.ChangeState((int)State.Charge); }
             if (Owner.move.activeControl?.device != Owner.assignedGamepad &&
             Owner.charge.activeControl?.device != Owner.assignedGamepad)
             {
                 Debug.Log("nun");
                 return;
             }
-            if (Owner.charge.IsPressed()) { StateMachine.ChangeState((int)State.Charge); }
             if(Owner.move.ReadValue<Vector2>()==new Vector2(0,0)) { StateMachine.ChangeState((int)State.Idle); }
             Owner.Angle();
             Owner.OnMove();
@@ -136,6 +134,7 @@ public class Player : MonoBehaviour
             {
                 Owner.chargePow = Owner.mChragePow;
             }
+            if (Owner.move.ReadValue<Vector2>() != new Vector2(0, 0)) { StateMachine.ChangeState((int)State.Charge); }
             if (Owner.move.activeControl?.device != Owner.assignedGamepad &&
           Owner.charge.activeControl?.device != Owner.assignedGamepad)
             {
