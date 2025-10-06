@@ -16,6 +16,12 @@ public class PlayGuidCon : MonoBehaviour
     public Image start;
     public Image close;
     public Image guid;
+    public Image Aimage;
+    public Image Entryimage;
+    public Image LStick;
+    public Image Move;
+    public Image RT;
+    public Image Charge;
 
     [Header("É{É^Éìê›íË")]
     public Button stgbtn;
@@ -47,29 +53,68 @@ public class PlayGuidCon : MonoBehaviour
 
     private IEnumerator OpenFade()
     {
-        yield return StartCoroutine(BackFadeIn());
-        yield return StartCoroutine(TitleFadeOut());
-        yield return StartCoroutine(StartFadeOut());
-        yield return StartCoroutine(CloseFadeIn());
-        yield return StartCoroutine(PlayGuidFadeOut());
         clzbtn.interactable = true;
         stgbtn.interactable = false;
         opnbtn.interactable = false;
+        yield return StartCoroutine(BackFadeIn());
+        yield return StartCoroutine(TitleFadeOut());
+        yield return StartCoroutine(StartFadeOut());
+        yield return StartCoroutine(PlayGuidFadeOut());
+        yield return StartCoroutine(CloseFadeIn());
+        yield return StartCoroutine(TextImageFadeIn());
     }
 
     private IEnumerator CloseFade()
     {
+        clzbtn.interactable = false;
+        opnbtn.interactable = true;
+        stgbtn.interactable = true;
+        //clzbtn.gameObject.SetActive(false);
         yield return StartCoroutine(CloseFadeOut());
+        yield return StartCoroutine(TextImageFadeOut());
         yield return StartCoroutine(BackFadeOut());
         yield return StartCoroutine(TitleFadeIn());
         yield return StartCoroutine(StartFadeIn());
         yield return StartCoroutine(PlayGuidFadeIn());
-        clzbtn.interactable = false;
-        opnbtn.interactable = true;
-        stgbtn.interactable = true;
-        clzbtn.gameObject.SetActive(false);
     }
 
+    private IEnumerator TextImageFadeIn()
+    {
+        float t = 0f;
+        Color color = Aimage.color;
+
+        while (t < FadeDuration)
+        {
+            t += Time.deltaTime;
+            color.a = Mathf.Clamp01(t / FadeDuration);
+            Aimage.color = color;
+            Entryimage.color = color;
+            LStick.color = color;
+            Move.color = color;
+            RT.color = color;
+            Charge.color = color;
+            yield return null;
+        }
+    }
+
+    private IEnumerator TextImageFadeOut()
+    {
+        float t = FadeDuration - 0.2f;
+        Color color = Aimage.color;
+
+        while (t > 0f)
+        {
+            t -= Time.deltaTime;
+            color.a = Mathf.Clamp01(t / FadeDuration);
+            Aimage.color = color;
+            Entryimage.color = color;
+            LStick.color = color;
+            Move.color = color;
+            RT.color = color;
+            Charge.color = color;
+            yield return null;
+        }
+    }
     private IEnumerator BackFadeIn()
     {
         float t = 0f;
@@ -83,7 +128,6 @@ public class PlayGuidCon : MonoBehaviour
             yield return null;
         }
     }
-
     private IEnumerator BackFadeOut()
     {
         float t = FadeDuration - 0.2f;
