@@ -301,5 +301,9 @@ public class Player : MonoBehaviour
         Quaternion targetRotation = Quaternion.LookRotation(direction);
         rb.MoveRotation(Quaternion.Slerp(rb.rotation, targetRotation, rotateSpeed * Time.fixedDeltaTime));
     }
+    public void OnHit()
+    {
+        stateMachine.ChangeState((int)State.Die);
+    }
     public float GetChargePow() => chargePow;
 }
