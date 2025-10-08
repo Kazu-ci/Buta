@@ -69,7 +69,6 @@ public class PlayGuidCon : MonoBehaviour
         clzbtn.interactable = false;
         opnbtn.interactable = true;
         stgbtn.interactable = true;
-        //clzbtn.gameObject.SetActive(false);
         yield return StartCoroutine(CloseFadeOut());
         yield return StartCoroutine(TextImageFadeOut());
         yield return StartCoroutine(BackFadeOut());
