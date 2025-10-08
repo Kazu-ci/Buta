@@ -17,6 +17,7 @@ public class SceneLoaderWithFade : MonoBehaviour
 
     private void Start()
     {
+        Application.targetFrameRate = 60;
         audioSource = gameObject.AddComponent<AudioSource>();
     }
 
@@ -25,7 +26,7 @@ public class SceneLoaderWithFade : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject); // シーンをまたいで生き残る
+            DontDestroyOnLoad(gameObject); //シーンをまたいで生き残る
         }
         else
         {
@@ -42,18 +43,18 @@ public class SceneLoaderWithFade : MonoBehaviour
         }
 
         StartCoroutine(FadeAndLoad(sceneName));
+
+        
     }
 
     private IEnumerator FadeAndLoad(string sceneName)
     {
         yield return StartCoroutine(FadeOut());
-
         SceneManager.LoadScene(sceneName);
-
         yield return new WaitForSeconds(0.1f); // 読み込み待機（任意）
-        yield return StartCoroutine(FadeIn());
+        
     }
-
+        
     private IEnumerator FadeOut()
     {
         float t = 0f;
@@ -64,6 +65,7 @@ public class SceneLoaderWithFade : MonoBehaviour
             t += Time.deltaTime;
             color.a = Mathf.Clamp01(t / fadeDuration);
             fadeImage.color = color;
+            Debug.Log("FageOut end");
             yield return null;
         }
     }
@@ -78,7 +80,9 @@ public class SceneLoaderWithFade : MonoBehaviour
             t -= Time.deltaTime;
             color.a = Mathf.Clamp01(t / fadeDuration);
             fadeImage.color = color;
+            
             yield return null;
         }
+        Debug.Log("FadeIn end");
     }
 }

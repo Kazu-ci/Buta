@@ -31,16 +31,14 @@ public class Player : MonoBehaviour
     {
         Idle,
         Move,
-        Brake,
+        Charge,
         Fire,
         Bound,
         Die,
     }
-    State state;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        state=State.Idle;
         rb = GetComponent<Rigidbody>();
         gameManager = FindObjectOfType<GameManager>();
         rb.linearDamping = drag;   // 慣性の減衰を設定
@@ -52,7 +50,7 @@ public class Player : MonoBehaviour
         stateMachine = new EStateMachine<Player>(this);
         stateMachine.Add<IdleState>((int)State.Idle);
         stateMachine.Add<MoveState>((int)State.Move);
-        stateMachine.Add<BreakState>((int)State.Brake);
+        stateMachine.Add<ChargeState>((int)State.Charge);
         stateMachine.Add<FireState>((int)State.Fire);
         stateMachine.Add<BoundState>((int)State.Bound);
         stateMachine.OnStart((int)State.Idle);
@@ -66,7 +64,7 @@ public class Player : MonoBehaviour
             return; // ゲームが始まっていないので物理処理もしない
 
         CollisionPredictionAndReflect();
-        Angle();
+        
         stateMachine.OnUpdate();
     }
 
@@ -85,119 +83,17 @@ public class Player : MonoBehaviour
 
         chargeEffect.SetParticles(particles, count);
     }
-    //void Think()
-    //{
-    //    if (state == State.Brake)
-    //    {
-    //        if (!charge.IsPressed())
-    //        {
-    //            rb.linearDamping = drag;
-    //        }
-    //        return;
-    //    }
-    //    switch (state)
-    //    {
-    //        case State.Idle:
-    //            if (move.ReadValue<Vector2>()!=new Vector2(0,0) ){ state = State.Move; }
-    //            if (charge.IsPressed()) { state = State.Brake; }
-    //            break;
-    //        case State.Move:
-    //            if (charge.IsPressed()) { state = State.Brake; }
-    //            if(move.ReadValue<Vector2>()==new Vector2(0,0)) { state = State.Idle; }
-    //            break;
-    //        case State.Brake:
-    //            if (!charge.IsPressed()) { state = State.Bound; }
-    //            break;
-    //        case State.Bound:
-    //            bTime += Time.deltaTime;
-    //            if (bTime >= 0.5f) 
-    //            {
-    //                if (rb.linearVelocity.magnitude < 0.1f)
-    //                {
-    //                    state = State.Idle;  // 停止していればIdleへ
-    //                }
-    //                else
-    //                {
-    //                    state = State.Move;  // 動いていればMoveへ戻す
-    //                }
-    //            }
-    //            break;
-    //        case State.Die:
-    //            break;
-    //    }
-    //}
-    //private void Move()
-    //{
-    //    switch (state)
-    //    {
-    //        case State.Move:
-    //            if (move.activeControl?.device != assignedGamepad &&
-    //        charge.activeControl?.device != assignedGamepad)
-    //            {
-    //                Debug.Log("nun");
-    //                return;
-    //            }
-    //            OnMove();
-    //            break;
-
-    //        case State.Brake:
-    //            if (move.activeControl?.device != assignedGamepad &&
-    //        charge.activeControl?.device != assignedGamepad)
-    //            {
-    //                return;
-    //            }
-    //            if (!chargeEffect.isPlaying)
-    //            {
-    //                chargeEffect.gameObject.SetActive(true);
-    //                chargeEffect.Play();
-    //            }
-    //            rb.linearVelocity *= cDrag;
-    //            chargePow += Time.deltaTime*60;
-    //            if (chargePow >= mChragePow) {
-    //                chargePow = mChragePow;
-                    
-                
-    //            }
-    //            if(!charge.IsPressed()) {
-    //                state = State.Fire;
-    //                if (chargeEffect.isPlaying)
-    //                {
-    //                    chargeEffect.gameObject.SetActive(false);
-    //                    chargeEffect.Stop();
-    //                }
-    //            }
-    //            //if(fire.IsPressed()) { state=State.Fire; }
-    //            break;
-    //        case State.Fire:
-    //            if (chargeEffect.isPlaying)
-    //                chargeEffect.Stop();
-    //            Vector3 velocity = rb.linearVelocity;
-    //            Vector3 moveDirFromVelocity = velocity.normalized;
-    //            rb.AddForce(moveDirFromVelocity * chargePow, ForceMode.VelocityChange);
-    //            chargePow = 0;
-    //            state = State.Bound;
-    //            break;
-    //        case State.Bound:
-    //            Debug.Log("Boundだよ");
-    //            bTime += Time.deltaTime;
-    //            // 反射中は速度を直接操作しない（物理演算に任せる）
-    //            break;
-
-    //        case State.Die:
-    //            if (chargeEffect.isPlaying)
-    //                chargeEffect.Stop();
-    //            // 動かないようにゼロ代入など
-    //            rb.linearVelocity = Vector3.zero;
-    //            break;
-    //    }
-    //}
+    
     private class IdleState : EStateMachine<Player>.StateBase
     {
-
+        public override void OnStart()
+        {
+            Debug.Log("Idle");
+        }
         public override void OnUpdate()
         {
             if (Owner.move.ReadValue<Vector2>() != new Vector2(0, 0)) { StateMachine.ChangeState((int)State.Move); }
-            if (Owner.charge.IsPressed()) { StateMachine.ChangeState((int)State.Brake); }
+            if (Owner.charge.IsPressed()) { StateMachine.ChangeState((int)State.Charge); }
         }
         public override void OnEnd()
         {
@@ -206,40 +102,58 @@ public class Player : MonoBehaviour
     }
     private class MoveState : EStateMachine<Player>.StateBase
     {
+        public override void OnStart()
+        {
+            Debug.Log("Move");
+        }
         public override void OnUpdate()
         {
-            if (Owner.charge.IsPressed()) { StateMachine.ChangeState((int)State.Brake); }
-            if(Owner.move.ReadValue<Vector2>()==new Vector2(0,0)) { StateMachine.ChangeState((int)State.Idle); }
+            if (Owner.charge.IsPressed()) { StateMachine.ChangeState((int)State.Charge); }
             if (Owner.move.activeControl?.device != Owner.assignedGamepad &&
             Owner.charge.activeControl?.device != Owner.assignedGamepad)
-                {
-                    Debug.Log("nun");
-                    return;
-                }
-             Owner.OnMove();
+            {
+                Debug.Log("nun");
+                return;
+            }
+            if(Owner.move.ReadValue<Vector2>()==new Vector2(0,0)) { StateMachine.ChangeState((int)State.Idle); }
+            Owner.Angle();
+            Owner.OnMove();
         }
     }
-    private class BreakState : EStateMachine<Player>.StateBase
+    private class ChargeState : EStateMachine<Player>.StateBase
     {
-
+        public override void OnStart()
+        {
+            Debug.Log("Chage");
+        }
         public override void OnUpdate()
         {
-            if (!Owner.charge.IsPressed()) { StateMachine.ChangeState((int)State.Bound); }
+            Owner.rb.linearVelocity *= Owner.cDrag;
+            Owner.chargePow += Time.deltaTime * 20;
+            if (Owner.chargePow >= Owner.mChragePow)
+            {
+                Owner.chargePow = Owner.mChragePow;
+            }
+            if (Owner.move.ReadValue<Vector2>() != new Vector2(0, 0)) { StateMachine.ChangeState((int)State.Charge); }
             if (Owner.move.activeControl?.device != Owner.assignedGamepad &&
           Owner.charge.activeControl?.device != Owner.assignedGamepad)
-              {
-                  return;
-              }
+            {
+                return;
+            }
+            if (!Owner.charge.IsPressed()) { StateMachine.ChangeState((int)State.Fire); }
               if (!Owner.chargeEffect.isPlaying)
               {
                   Owner.chargeEffect.gameObject.SetActive(true);
                   Owner.chargeEffect.Play();
               }
-              Owner.rb.linearVelocity *= Owner.cDrag;
-              Owner.chargePow += Time.deltaTime*60;
-              if (Owner.chargePow >= Owner.mChragePow) {
-                  Owner.chargePow = Owner.mChragePow;
-              }
+              
+             
+            Owner.Angle();
+            if (Owner.moveDir.sqrMagnitude > 0.01f)
+            {
+                Owner.UpdateRotation(Owner.moveDir);
+            }
+            if (Owner.charge.IsPressed()) { StateMachine.ChangeState((int)State.Charge); }
         }
         public override void OnEnd()
         {
@@ -252,7 +166,7 @@ public class Player : MonoBehaviour
     {
         public override void OnStart()
         {
-
+            Debug.Log("Bound");
         }
         public override void OnUpdate()
         {
@@ -261,11 +175,11 @@ public class Player : MonoBehaviour
             {
                  if (Owner.rb.linearVelocity.magnitude < 0.1f)
                  {
-                     StateMachine.ChangeState((int)State.Idle);  // 停止していればIdleへ
+                     StateMachine.ChangeState((int)State.Idle);  //停止していればIdleへ
                  }
                  else
                  {
-                     StateMachine.ChangeState((int)State.Move);  // 動いていればMoveへ戻す
+                     StateMachine.ChangeState((int)State.Move);  //動いていればMoveへ戻す
                  }
              }
         }
@@ -278,15 +192,31 @@ public class Player : MonoBehaviour
     {
         public override void OnStart()
         {
-
+            Debug.Log("Fire");
         }
         public override void OnUpdate()
         {
+            //if (Owner.chargeEffect.isPlaying)
+            //    Owner.chargeEffect.Stop();
+            //Vector3 velocity = Owner.rb.linearVelocity;
+            //Vector3 moveDirFromVelocity = velocity.normalized;
+            //Owner.rb.AddForce(moveDirFromVelocity * Owner.chargePow, ForceMode.VelocityChange);
+            //Owner.chargePow = 0;
+            //StateMachine.ChangeState((int)State.Bound);
             if (Owner.chargeEffect.isPlaying)
                 Owner.chargeEffect.Stop();
-            Vector3 velocity = Owner.rb.linearVelocity;
-            Vector3 moveDirFromVelocity = velocity.normalized;
-            Owner.rb.AddForce(moveDirFromVelocity * Owner.chargePow, ForceMode.VelocityChange);
+
+            Vector3 fireDirection = Owner.moveDir;
+            if (fireDirection.sqrMagnitude < 0.01f)
+            {
+                fireDirection = Owner.rb.linearVelocity.normalized;
+            }
+            else
+            {
+                fireDirection.Normalize();
+            }
+
+            Owner.rb.AddForce(fireDirection * Owner.chargePow, ForceMode.VelocityChange);
             Owner.chargePow = 0;
             StateMachine.ChangeState((int)State.Bound);
         }
@@ -297,7 +227,10 @@ public class Player : MonoBehaviour
     }
     private class DieState : EStateMachine<Player>.StateBase
     {
-
+        public override void OnStart()
+        {
+            Debug.Log("Die");
+        }
         public override void OnUpdate()
         {
             if (Owner.chargeEffect.isPlaying) { Owner.chargeEffect.Stop(); }
@@ -350,7 +283,7 @@ public class Player : MonoBehaviour
             Vector3 reflected = Vector3.Reflect(velocity, hitNormal);
 
             rb.linearVelocity = Vector3.zero; // 一度停止
-            rb.AddForce(reflected.normalized * 25, ForceMode.VelocityChange);
+            rb.AddForce(reflected.normalized * 50, ForceMode.VelocityChange);
 
             Debug.DrawRay(transform.position, direction * hit.distance, Color.red, 0.2f);
             Debug.DrawRay(hit.point, hitNormal, Color.yellow, 0.2f);
@@ -360,6 +293,17 @@ public class Player : MonoBehaviour
         {
             Debug.DrawRay(transform.position, direction * rayLength, Color.green, 0.1f);
         }
+    }
+    public void UpdateRotation(Vector3 direction)
+    {
+        if (direction.sqrMagnitude < 0.01f) return;
+
+        Quaternion targetRotation = Quaternion.LookRotation(direction);
+        rb.MoveRotation(Quaternion.Slerp(rb.rotation, targetRotation, rotateSpeed * Time.fixedDeltaTime));
+    }
+    public void OnHit()
+    {
+        stateMachine.ChangeState((int)State.Die);
     }
     public float GetChargePow() => chargePow;
 }

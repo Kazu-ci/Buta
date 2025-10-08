@@ -34,5 +34,11 @@ public class PlayerGenerator : MonoBehaviour
         splitScreenIndex: playerIndex++
     );
         Debug.Log($"Player {playerIndex} joined with {gamepad.displayName}");
+        //パーティクルシステム関連
+        var attractor = FindObjectOfType<ParticleGnerater>();
+        if (attractor != null)
+        {
+            attractor.SetTarget(playerInput.transform);
+        }
     }
 }
