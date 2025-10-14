@@ -28,7 +28,7 @@ public class dead : MonoBehaviour
             Debug.Log("Dead");
             Debug.Log("player2");
             player1.alive1 = true;
-            isPlayerDead = true;
+            //isPlayerDead = true;
             //SceneManager.LoadScene("Result");
         }
         

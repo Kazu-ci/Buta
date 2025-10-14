@@ -24,7 +24,7 @@ public class MapGimmick : MonoBehaviour
         {
             gameTime+=Time.deltaTime;
 
-            Debug.Log("time"+gameTime);
+            //Debug.Log("time"+gameTime);
 
             if(gameTime > 10)
             {
