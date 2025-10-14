@@ -4,10 +4,7 @@ using UnityEngine;
 public class MapGimmick : MonoBehaviour
 {
     public GameObject minimeteor;
-
-    GameManager gameManager;
-    //InGameManager.GameState gameState;
-    
+    GameManager gameManager;    
     private float gameTime = 0;
 
     void Awake()
@@ -18,23 +15,26 @@ public class MapGimmick : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        meteor();
+        gimmick();
     }
 
-    public void meteor ()
+    public void gimmick()
     {
         if (gameManager != null&& gameManager.state ==GameManager.State.Ingame)
         {
-            gameTime+=Time.deltaTime ;
+            gameTime+=Time.deltaTime;
+
             Debug.Log("time"+gameTime);
-        }
-        else
-        {
-            Debug.Log("GameManager has an error");
-        }
+
+            if(gameTime > 10)
+            {
+                Instantiate(minimeteor);
+                gameTime = 0;
+            }
             
+
+        }
     }
 
-
-
+    
 }
