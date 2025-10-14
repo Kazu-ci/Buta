@@ -6,11 +6,11 @@ public class ResultSceneManager : MonoBehaviour
 
     void Update()
     {
-        if (dead.isPlayerDead && !hasStarted)
-        {
-            hasStarted = true;
-            dead.isPlayerDead = false; // フラグリセット
-            SceneLoaderWithFade.Instance.LoadSceneWithFade("Result");
-        }
+        //if (dead.isPlayerDead && !hasStarted)
+        //{
+        //    hasStarted = true;
+        //    dead.isPlayerDead = false; //フラグリセット
+        //    SceneLoaderWithFade.Instance.LoadSceneWithFade("Result");
+        //}
     }
 }

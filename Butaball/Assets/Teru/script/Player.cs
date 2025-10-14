@@ -270,7 +270,7 @@ public class Player : MonoBehaviour
     }
   
 
-    void CollisionPredictionAndReflect()
+    public void CollisionPredictionAndReflect()
     {
         Vector3 velocity = rb.linearVelocity;
         float speed = velocity.magnitude;

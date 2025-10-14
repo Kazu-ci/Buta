@@ -26,9 +26,9 @@ public class dead : MonoBehaviour
         else if(other.CompareTag("player2"))
         {
             Debug.Log("Dead");
-            Debug.Log("p@layer2");
+            Debug.Log("player2");
             player1.alive1 = true;
-            isPlayerDead = true;
+            //isPlayerDead = true;
             //SceneManager.LoadScene("Result");
         }
         

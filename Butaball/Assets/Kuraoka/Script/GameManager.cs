@@ -17,7 +17,7 @@ public class GameManager : MonoBehaviour
 
     private float countdown;
     private float gameStartTimer;
-    private State state;
+    public State state;
 
     void Start()
     {
