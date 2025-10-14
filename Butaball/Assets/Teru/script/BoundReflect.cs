@@ -4,9 +4,19 @@ public class BoundReflect : MonoBehaviour
 {
     Rigidbody rb;
     public LayerMask collisionMask;
+    float yPos;
+    float yCurrent;
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
+        yCurrent = this.transform.position.y;
+    }
+    private void Update()
+    {
+        yPos = this.transform.position.y;
+        if (yCurrent < yPos) this.transform.position = new Vector3(this.transform.position.x, yCurrent, this.transform.position.z);
+        else if (yCurrent > yPos) yCurrent = yPos;
+        CollisionPredictionAndReflect();
     }
     public void CollisionPredictionAndReflect()
     {

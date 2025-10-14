@@ -736,7 +736,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   collisionMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4294967295
 --- !u!1 &572895653 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4454720211723526585, guid: 52cc71e3c8724e54e970737f6d0bca91, type: 3}
@@ -783,7 +783,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   collisionMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4294967295
 --- !u!1 &602670903
 GameObject:
   m_ObjectHideFlags: 0
@@ -1963,11 +1963,7 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 457460997}
   m_SourcePrefab: {fileID: 100100000, guid: 83c0797904f10cb4698bb97e2680dbce, type: 3}
-<<<<<<< HEAD
---- !u!1001 &1416068596
-=======
 --- !u!1001 &1420903976
->>>>>>> noko
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -1975,9 +1971,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-<<<<<<< HEAD
-    - target: {fileID: 1525188057876345738, guid: 40f776992b5a3344b88288a89f60b72f, type: 3}
-=======
     - target: {fileID: 918203621495784154, guid: 52cc71e3c8724e54e970737f6d0bca91, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.279
@@ -2091,7 +2084,6 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 3505990822868992613, guid: d9c710f75164bd541b0511d9644cd086, type: 3}
->>>>>>> noko
       propertyPath: m_Name
       value: 2
       objectReference: {fileID: 0}
@@ -2148,13 +2140,8 @@ PrefabInstance:
       addedObject: {fileID: 1804519826}
     - targetCorrespondingSourceObject: {fileID: 3505990822868992613, guid: d9c710f75164bd541b0511d9644cd086, type: 3}
       insertIndex: -1
-<<<<<<< HEAD
-      addedObject: {fileID: 181458700}
-  m_SourcePrefab: {fileID: 100100000, guid: 40f776992b5a3344b88288a89f60b72f, type: 3}
-=======
       addedObject: {fileID: 1804519827}
   m_SourcePrefab: {fileID: 100100000, guid: d9c710f75164bd541b0511d9644cd086, type: 3}
->>>>>>> noko
 --- !u!1001 &1593339151
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2761,7 +2748,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   collisionMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4294967295
 --- !u!1 &1926655704 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 150859742725305809, guid: 83c0797904f10cb4698bb97e2680dbce, type: 3}
@@ -2933,7 +2920,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   collisionMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4294967295
 --- !u!1 &2101407544 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 150859742725305809, guid: 83c0797904f10cb4698bb97e2680dbce, type: 3}
@@ -3040,13 +3027,9 @@ SceneRoots:
   - {fileID: 602670904}
   - {fileID: 1266599248}
   - {fileID: 432838812}
-<<<<<<< HEAD
-  - {fileID: 1416068596}
-=======
   - {fileID: 1570376835}
   - {fileID: 700942542}
   - {fileID: 625239219}
   - {fileID: 1420903976}
   - {fileID: 1590247786}
   - {fileID: 263962786}
->>>>>>> noko
