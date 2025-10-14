@@ -27,6 +27,8 @@ public class Player : MonoBehaviour
     Vector3 moveDir;
     public LayerMask collisionMask;
     public Gamepad assignedGamepad;
+    float yPos;
+    float yCurrent;
     enum State
     {
         Idle,
@@ -54,6 +56,7 @@ public class Player : MonoBehaviour
         stateMachine.Add<FireState>((int)State.Fire);
         stateMachine.Add<BoundState>((int)State.Bound);
         stateMachine.OnStart((int)State.Idle);
+        yCurrent =this.transform.position.y;
     }
 
     // Update is called once per frame
@@ -62,7 +65,9 @@ public class Player : MonoBehaviour
     {
         if (gameManager == null || gameManager.GetGameState() != GameManager.State.Ingame)
             return; // ゲームが始まっていないので物理処理もしない
-
+        yPos = this.transform.position.y;
+        if(yCurrent < yPos)this.transform.position = new Vector3(this.transform.position.x, yCurrent, this.transform.position.z);
+        else if(yCurrent > yPos) yCurrent = yPos;
         CollisionPredictionAndReflect();
         
         stateMachine.OnUpdate();

@@ -23,7 +23,7 @@ public class dead : MonoBehaviour
             player1.alive1 = false;
             isPlayerDead = true;
         }
-        else
+        else if(other.CompareTag("player2"))
         {
             Debug.Log("Dead");
             Debug.Log("p@layer2");
