@@ -65,7 +65,6 @@ public class minimeteor : MonoBehaviour
         }
         public override void OnUpdate()
         {
-            //プレイヤーに情報を渡す
             StateMachine.ChangeState((int)state.End);      //次のステートに移行
         }
         public override void OnEnd()
