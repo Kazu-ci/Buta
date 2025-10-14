@@ -775,6 +775,10 @@ PrefabInstance:
       value: Cube (1)
       objectReference: {fileID: 0}
     - target: {fileID: 457590038976630901, guid: 83c0797904f10cb4698bb97e2680dbce, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.03
+      objectReference: {fileID: 0}
+    - target: {fileID: 457590038976630901, guid: 83c0797904f10cb4698bb97e2680dbce, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.622
       objectReference: {fileID: 0}
@@ -813,6 +817,10 @@ PrefabInstance:
     - target: {fileID: 457590038976630901, guid: 83c0797904f10cb4698bb97e2680dbce, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4555219955887830419, guid: 83c0797904f10cb4698bb97e2680dbce, type: 3}
+      propertyPath: m_Size.y
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6359278327757792439, guid: 83c0797904f10cb4698bb97e2680dbce, type: 3}
       propertyPath: m_Enabled
