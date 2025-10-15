@@ -10,7 +10,7 @@ public class Player : MonoBehaviour
     [SerializeField] float accelaration;
     [SerializeField] PlayerInput action;
     [SerializeField] float rotateSpeed;
-    [SerializeField] float mChragePow;
+    [SerializeField] public float mChragePow;
     [SerializeField] float moveForce;
     [SerializeField] float maxSpeed;
     [SerializeField] float drag;  // 抵抗（慣性調整）
