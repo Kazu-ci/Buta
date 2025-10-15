@@ -7,8 +7,11 @@ public class MainGameEnd : MonoBehaviour
     private float gameTime = 0f;
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     private float gameMaxTime = 120f;
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
     private float gameMaxTime = 1000f;

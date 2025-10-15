@@ -13,6 +13,8 @@ public class ScoreManager : MonoBehaviour
         Player2Score = 0;
     }
 
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
     void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("ball1"))
@@ -26,6 +28,27 @@ public class ScoreManager : MonoBehaviour
             Debug.Log("player2ƒXƒRƒA" + Player2Score);
         }
     }
+=======
+=======
+>>>>>>> Stashed changes
+    void Awake()
+    {
+        if(instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
 
     // Update is called once per frame
     void Update()
