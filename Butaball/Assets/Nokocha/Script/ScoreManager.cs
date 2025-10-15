@@ -3,6 +3,8 @@ using UnityEngine;
 public class ScoreManager : MonoBehaviour
 {
 
+    public static ScoreManager instance;
+
     public static int Player1Score;
     public static int Player2Score;
 
@@ -11,6 +13,19 @@ public class ScoreManager : MonoBehaviour
     {
         Player1Score = 0;
         Player2Score = 0;
+    }
+
+    void Awake()
+    {
+        if(instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
     void OnTriggerEnter(Collider other)

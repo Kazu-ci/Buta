@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class ResultSceneManager : MonoBehaviour
 {
-    private bool hasStarted = false;
+    //private bool hasStarted = false;
 
     void Update()
     {
