@@ -8,8 +8,8 @@ public class PlayerGenerator : MonoBehaviour
 {
     public GameObject[] playerPrefab;
     //UI関連：倉岡追加
-    [SerializeField] private GameObject chargeUIPrefab;
-    [SerializeField] private RectTransform uiParent;
+ 
+    [SerializeField] private ChargeUIManager[] chargeUIManagers;
     private int playerIndex = 0;
 
     void Update()
@@ -37,13 +37,12 @@ public class PlayerGenerator : MonoBehaviour
         splitScreenIndex: playerIndex++
     );
         Debug.Log($"Player {playerIndex} joined with {gamepad.displayName}");
-        var uiInstance = Instantiate(chargeUIPrefab, uiParent);
-        var uiManager = uiInstance.GetComponent<ChargeUIManager>();
-        uiManager.AssignPlayer(playerInput.GetComponent<Player>());
-
-        // UI位置設定
-        RectTransform rect = uiInstance.GetComponent<RectTransform>();
-        SetUIPosition(rect, playerIndex);
+        //倉岡追加
+        if (playerIndex - 1 < chargeUIManagers.Length)
+        {
+            chargeUIManagers[playerIndex - 1].AssignPlayer(playerInput.GetComponent<Player>());
+            Debug.Log($"Assigned {playerInput.name} to {chargeUIManagers[playerIndex - 1].name}");
+        }
 
         //パーティクルシステム関連
         var attractor = FindObjectOfType<ParticleGnerater>();
