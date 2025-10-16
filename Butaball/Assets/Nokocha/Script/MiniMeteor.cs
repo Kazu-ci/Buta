@@ -62,6 +62,7 @@ public class minimeteor : MonoBehaviour
         if(player != null)
         {
             player.OnHit();
+            
             Debug.Log("playerHit");
         }
 

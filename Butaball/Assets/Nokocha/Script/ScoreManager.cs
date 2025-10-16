@@ -34,11 +34,14 @@ public class ScoreManager : MonoBehaviour
         {
             Player1Score += 1;
             Debug.Log("player1スコア" + Player1Score);
+            //触れたボールを削除
+            Destroy(other.gameObject);
         }
         else  if(other.CompareTag("ball2"))
         {
             Player2Score += 1;
             Debug.Log("player2スコア" + Player2Score);
+            Destroy(other.gameObject);
         }
     }
 

@@ -5,7 +5,7 @@ public class MainGameEnd : MonoBehaviour
 {
     GameManager gameManager;
     private float gameTime = 0f;
-    private float gameMaxTime = 10f;
+    private float gameMaxTime = 120f;
     private bool stopper;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
@@ -19,7 +19,7 @@ public class MainGameEnd : MonoBehaviour
         if (gameManager != null && gameManager.state == GameManager.State.Ingame)
         {
             gameTime += Time.deltaTime;
-            Debug.Log("経過時間："+gameTime);
+            //Debug.Log("経過時間："+gameTime);
         }
     }
 
