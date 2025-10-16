@@ -19,7 +19,7 @@ public class MainGameEnd : MonoBehaviour
         if (gameManager != null && gameManager.state == GameManager.State.Ingame)
         {
             gameTime += Time.deltaTime;
-            //Debug.Log("経過時間："+gameTime);
+            Debug.Log("経過時間："+gameTime);
         }
     }
 
@@ -29,8 +29,17 @@ public class MainGameEnd : MonoBehaviour
         {
             if (gameTime > gameMaxTime)
             {
-                SceneLoaderWithFade.Instance.LoadSceneWithFade("Result");
-                stopper = false;
+                if(ScoreManager.Player1Score != ScoreManager.Player2Score)
+                {
+                    SceneLoaderWithFade.Instance.LoadSceneWithFade("Result");
+                    stopper = false;
+                }
+                else
+                {
+                    SceneLoaderWithFade.Instance.LoadSceneWithFade("hikiwake");
+                    stopper = false;
+                }
+                
             }
         }
     }

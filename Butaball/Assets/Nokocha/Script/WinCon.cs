@@ -22,10 +22,14 @@ public class WinCon : MonoBehaviour
             WinPlayer = true;
             Debug.Log("P1‚ÌŸ‚¿");
         }
-        else
+        else if(p1score < p2score)
         {
             WinPlayer = false;
             Debug.Log("P2‚ÌŸ‚¿");
+        }
+        else
+        {
+            Debug.Log("ˆø‚«•ª‚¯");
         }
     }
 }
