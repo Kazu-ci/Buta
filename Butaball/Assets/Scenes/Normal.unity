@@ -612,6 +612,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 531699610}
+  - component: {fileID: 531699611}
   m_Layer: 0
   m_Name: meteorRight
   m_TagString: Untagged
@@ -619,21 +620,33 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &531699610
-Transform:
+--- !u!224 &531699610
+RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 531699609}
-  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 0.7}
+  m_LocalPosition: {x: 0, y: 0, z: 0.7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 1}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &531699611
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 531699609}
+  m_CullTransparentMesh: 1
 --- !u!1 &572895653 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4454720211723526585, guid: 52cc71e3c8724e54e970737f6d0bca91, type: 3}
@@ -1002,7 +1015,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: b7b3ebcadd46e8749a7a3d4c5f58395e, type: 2}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1820,7 +1833,7 @@ MonoBehaviour:
   ballTrigger: 1
   tableCollider: {fileID: 456522507}
   meteorSpawnPoint:
-  - {fileID: 531699610}
+  - {fileID: 0}
   - {fileID: 1688514571}
 --- !u!4 &1570376835
 Transform:
@@ -2966,5 +2979,5 @@ SceneRoots:
   - {fileID: 1342965130}
   - {fileID: 1658179880}
   - {fileID: 325063185}
-  - {fileID: 531699610}
   - {fileID: 1688514571}
+  - {fileID: 531699610}

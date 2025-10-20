@@ -37,7 +37,7 @@ public class ScoreManager : MonoBehaviour
             //触れたボールを削除
             Destroy(other.gameObject);
         }
-        else  if(other.CompareTag("ball2"))
+        else if (other.CompareTag("ball2"))
         {
             Player2Score += 1;
             Debug.Log("player2スコア" + Player2Score);
