@@ -1,5 +1,7 @@
 using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
+using static UnityEngine.UI.Image;
 
 public class MapGimmick : MonoBehaviour
 {
@@ -29,9 +31,14 @@ public class MapGimmick : MonoBehaviour
     //インスペクターからメテオの出現位置を設定
     public Transform[] meteorSpawnPoint;
 
+    Vector3 direction;
+
+    RaycastHit hit;
+
     void Awake()
     {
         gameManager = GameObject.Find("SceneManagerObj").gameObject.GetComponent<GameManager>();
+        
     }
 
     // Update is called once per frame
@@ -74,8 +81,13 @@ public class MapGimmick : MonoBehaviour
         //ランダムに選ばれた出現位置のtranceformを取得
         Transform spawnpoint = meteorSpawnPoint[randomIndex];
 
+        //rayの進行方向の取得
+        direction = -spawnpoint.transform.transform.up;
+
         //選ばれた場所の位置にメテオを生成
         Instantiate(minimeteor, spawnpoint.position,spawnpoint.rotation);
+
+        Rayhit();
 
         gameTime = 0;
         ballTrigger=true;
@@ -100,6 +112,19 @@ public class MapGimmick : MonoBehaviour
                 Vector3 spawnposition = new Vector3(randomX, tableBounds.max.y + PosY, randomZ);
                 //ボールの生成
                 Instantiate(ball, spawnposition, Quaternion.identity);
+            }
+        }
+    }
+
+    private void Rayhit()
+    {
+        Ray ray = new Ray(transform.position, direction);
+        Debug.Log(ray);
+        if(Physics.Raycast(ray.origin, ray.direction, out hit))
+        {
+            if(hit.collider.CompareTag("map"))
+            {
+                Debug.Log("rayがmapに衝突");
             }
         }
     }
