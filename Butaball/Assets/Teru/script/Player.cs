@@ -1,4 +1,5 @@
 ﻿
+using Unity.Burst;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -20,6 +21,7 @@ public class Player : MonoBehaviour
     Rigidbody rb;
     InputAction move;
     InputAction charge;
+    InputAction rize;
     float bTime;
     float cTime;
     float chargePow;
@@ -29,6 +31,8 @@ public class Player : MonoBehaviour
     public Gamepad assignedGamepad;
     float yPos;
     float yCurrent;
+    bool Dead = false;
+    Vector3 firstPos;
     enum State
     {
         Idle,
@@ -49,14 +53,17 @@ public class Player : MonoBehaviour
         rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
         move = action.actions["Move"];
         charge = action.actions["Charge"];
+        rize = action.actions["Rize"];
         stateMachine = new EStateMachine<Player>(this);
         stateMachine.Add<IdleState>((int)State.Idle);
         stateMachine.Add<MoveState>((int)State.Move);
         stateMachine.Add<ChargeState>((int)State.Charge);
         stateMachine.Add<FireState>((int)State.Fire);
         stateMachine.Add<BoundState>((int)State.Bound);
+        stateMachine.Add<DieState>((int)State.Die);
         stateMachine.OnStart((int)State.Idle);
         yCurrent =this.transform.position.y;
+        firstPos = this.transform.position;
     }
 
     // Update is called once per frame
@@ -69,8 +76,8 @@ public class Player : MonoBehaviour
         if(yCurrent < yPos)this.transform.position = new Vector3(this.transform.position.x, yCurrent, this.transform.position.z);
         else if(yCurrent > yPos) yCurrent = yPos;
         CollisionPredictionAndReflect();
-        
         stateMachine.OnUpdate();
+        //gameObject.SetActive(Dead);
     }
 
     void LateUpdate()
@@ -97,6 +104,7 @@ public class Player : MonoBehaviour
         }
         public override void OnUpdate()
         {
+            if (Owner.Dead) { StateMachine.ChangeState((int)State.Die); }
             if (Owner.move.ReadValue<Vector2>() != new Vector2(0, 0)) { StateMachine.ChangeState((int)State.Move); }
             if (Owner.charge.IsPressed()) { StateMachine.ChangeState((int)State.Charge); }
         }
@@ -113,6 +121,7 @@ public class Player : MonoBehaviour
         }
         public override void OnUpdate()
         {
+            if (Owner.Dead) { StateMachine.ChangeState((int)State.Die); }
             if (Owner.charge.IsPressed()) { StateMachine.ChangeState((int)State.Charge); }
             if (Owner.move.activeControl?.device != Owner.assignedGamepad &&
             Owner.charge.activeControl?.device != Owner.assignedGamepad)
@@ -133,6 +142,7 @@ public class Player : MonoBehaviour
         }
         public override void OnUpdate()
         {
+            if (Owner.Dead) { StateMachine.ChangeState((int)State.Die); }
             Owner.rb.linearVelocity *= Owner.cDrag;
             Owner.chargePow += Time.deltaTime * 20;
             if (Owner.chargePow >= Owner.mChragePow)
@@ -175,6 +185,7 @@ public class Player : MonoBehaviour
         }
         public override void OnUpdate()
         {
+            if (Owner.Dead) { StateMachine.ChangeState((int)State.Die); }
             Owner.bTime += Time.deltaTime;
             if (Owner.bTime >= 0.5f)
             {
@@ -208,6 +219,7 @@ public class Player : MonoBehaviour
             //Owner.rb.AddForce(moveDirFromVelocity * Owner.chargePow, ForceMode.VelocityChange);
             //Owner.chargePow = 0;
             //StateMachine.ChangeState((int)State.Bound);
+            if (Owner.Dead) { StateMachine.ChangeState((int)State.Die); }
             if (Owner.chargeEffect.isPlaying)
                 Owner.chargeEffect.Stop();
 
@@ -240,6 +252,16 @@ public class Player : MonoBehaviour
         {
             if (Owner.chargeEffect.isPlaying) { Owner.chargeEffect.Stop(); }
             Owner.rb.linearVelocity = Vector3.zero;
+            Owner.rb.linearVelocity *= Owner.cDrag;
+            //Destroy(Owner.gameObject);
+            if (Owner.rize.IsPressed()) { StateMachine.ChangeState((int)State.Idle); }
+        }
+        public override void OnEnd()
+        {
+            Owner.yPos = Owner.firstPos.y;
+            Owner.yCurrent = Owner.firstPos.y;
+            Owner.transform.position = Owner.firstPos;
+            Owner.Dead = false;
         }
 
     }
@@ -308,7 +330,7 @@ public class Player : MonoBehaviour
     }
     public void OnHit()
     {
-        stateMachine.ChangeState((int)State.Die);
+        Dead = true;
     }
     public float GetChargePow() => chargePow;
 }
