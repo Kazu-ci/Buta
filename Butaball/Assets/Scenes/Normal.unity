@@ -379,6 +379,7 @@ GameObject:
   - component: {fileID: 325063185}
   - component: {fileID: 325063184}
   - component: {fileID: 325063183}
+  - component: {fileID: 325063186}
   m_Layer: 0
   m_Name: pokketMiddleUp
   m_TagString: Untagged
@@ -434,6 +435,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &325063186
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 325063182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 431eb91a36f3b1842adcaf3a305e02c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &432838810
 GameObject:
   m_ObjectHideFlags: 0
@@ -880,6 +893,7 @@ GameObject:
   - component: {fileID: 690750760}
   - component: {fileID: 690750759}
   - component: {fileID: 690750758}
+  - component: {fileID: 690750761}
   m_Layer: 0
   m_Name: pokketRightUp
   m_TagString: Untagged
@@ -935,6 +949,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &690750761
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 690750757}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 431eb91a36f3b1842adcaf3a305e02c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &700942539
 GameObject:
   m_ObjectHideFlags: 0
@@ -1687,6 +1713,7 @@ GameObject:
   - component: {fileID: 1342965130}
   - component: {fileID: 1342965129}
   - component: {fileID: 1342965128}
+  - component: {fileID: 1342965131}
   m_Layer: 0
   m_Name: pokketLeftDown
   m_TagString: Untagged
@@ -1742,6 +1769,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1342965131
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1342965127}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 431eb91a36f3b1842adcaf3a305e02c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1570376833
 GameObject:
   m_ObjectHideFlags: 0
@@ -1951,6 +1990,7 @@ GameObject:
   - component: {fileID: 1643861296}
   - component: {fileID: 1643861295}
   - component: {fileID: 1643861294}
+  - component: {fileID: 1643861297}
   m_Layer: 0
   m_Name: pokketLeftUp
   m_TagString: Untagged
@@ -2006,6 +2046,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1643861297
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1643861293}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 431eb91a36f3b1842adcaf3a305e02c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1658179877
 GameObject:
   m_ObjectHideFlags: 0
@@ -2017,6 +2069,7 @@ GameObject:
   - component: {fileID: 1658179880}
   - component: {fileID: 1658179879}
   - component: {fileID: 1658179878}
+  - component: {fileID: 1658179881}
   m_Layer: 0
   m_Name: pokketMiddleDown
   m_TagString: Untagged
@@ -2072,6 +2125,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1658179881
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1658179877}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 431eb91a36f3b1842adcaf3a305e02c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1688514570
 GameObject:
   m_ObjectHideFlags: 0
@@ -2689,6 +2754,7 @@ GameObject:
   - component: {fileID: 2053856264}
   - component: {fileID: 2053856263}
   - component: {fileID: 2053856262}
+  - component: {fileID: 2053856265}
   m_Layer: 0
   m_Name: pokketRightDown
   m_TagString: Untagged
@@ -2744,6 +2810,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2053856265
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2053856261}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 431eb91a36f3b1842adcaf3a305e02c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &5313689646327012927
 PrefabInstance:
   m_ObjectHideFlags: 0
