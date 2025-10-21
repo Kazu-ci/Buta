@@ -1,5 +1,5 @@
-using System.Drawing;
-using Unity.VisualScripting;
+using Cysharp.Threading.Tasks;
+using System;
 using UnityEngine;
 
 public class MapGimmick : MonoBehaviour
@@ -43,7 +43,7 @@ public class MapGimmick : MonoBehaviour
     void Awake()
     {
         gameManager = GameObject.Find("SceneManagerObj").gameObject.GetComponent<GameManager>();
-        Danger.SetActive(false);
+        
     }
 
     // Update is called once per frame
@@ -56,9 +56,8 @@ public class MapGimmick : MonoBehaviour
     {
         if (gameManager != null&& gameManager.state ==GameManager.State.Ingame)
         {
+            //ゲームの経過時間を計測
             gameTime+=Time.deltaTime;
-
-            //Debug.Log("time"+gameTime);
 
             if(gameTime > BallTime)
             {
@@ -71,30 +70,29 @@ public class MapGimmick : MonoBehaviour
             if(gameTime > MeteorTime)
             {
                 Meteorgimmick();
-
             }
 
         }
     }
 
     //メテオ
-    public void Meteorgimmick()
+    async public void Meteorgimmick()
     {
-        //ray呼び出し
-        Rayhit();
         //0から配列の要素数-1までのランダムな整数を取得
-        int randomIndex = Random.Range(0, meteorSpawnPoint.Length);
+        int randomIndex = UnityEngine.Random.Range(0, meteorSpawnPoint.Length);
         //ランダムに選ばれた出現位置のtranceformを取得
         Transform spawnpoint = meteorSpawnPoint[randomIndex];
         //rayの進行方向の取得
         direction = -spawnpoint.transform.up;
         //rayの生成場所の取得
         startPoint = spawnpoint.position;
-        //選ばれた場所の位置にメテオを生成
-        Instantiate(minimeteor, spawnpoint.position,spawnpoint.rotation);
-
+        //ray呼び出し
+        Rayhit();
         gameTime = 0;
-        ballTrigger=true;
+        ballTrigger = true;
+        //数秒後に選ばれた場所の位置メテオを生成
+        await UniTask.Delay(TimeSpan.FromSeconds(3));
+        Instantiate(minimeteor, spawnpoint.position, spawnpoint.rotation);
     }
 
     //ボール
@@ -109,9 +107,9 @@ public class MapGimmick : MonoBehaviour
             for (int i = 0; i < SpawnBall; i++)//SpawnBallはボールを出す数
             {
                 //ランダムなXの位置
-                float randomX = Random.Range(tableBounds.min.x, tableBounds.max.x);
+                float randomX = UnityEngine.Random.Range(tableBounds.min.x, tableBounds.max.x);
                 //ランダムなZの位置
-                float randomZ = Random.Range(tableBounds.min.z, tableBounds.max.z);
+                float randomZ = UnityEngine.Random.Range(tableBounds.min.z, tableBounds.max.z);
                 //生成する位置の決定
                 Vector3 spawnposition = new Vector3(randomX, tableBounds.max.y + PosY, randomZ);
                 //ボールの生成
@@ -123,22 +121,16 @@ public class MapGimmick : MonoBehaviour
     private void Rayhit()
     {
         Ray ray = new Ray(startPoint, direction);
-        Debug.Log(ray);
         if (Physics.Raycast(ray.origin, ray.direction, out hit))
-
         {
-            
             Debug.Log("ray衝突" + hit.collider.name);
 
             if (hit.collider.CompareTag("map"))
             {
                 Debug.Log("rayがmapに衝突" + hit.point);
-                Danger.SetActive(true);
+                Vector3 hitPoint = hit.point + new Vector3(0,0.1f,0);
+                Instantiate(Danger,hitPoint, Quaternion.identity);
             }
         }
     }
-
-
-
-
 }
