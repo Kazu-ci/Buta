@@ -1,7 +1,6 @@
+using System.Drawing;
 using Unity.VisualScripting;
 using UnityEngine;
-using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
-using static UnityEngine.UI.Image;
 
 public class MapGimmick : MonoBehaviour
 {
@@ -26,19 +25,25 @@ public class MapGimmick : MonoBehaviour
     public float AreaX = 1.0f;
     //ボールのフラグ
     public bool ballTrigger = true;
+    //ボールフラグ
+    public bool meteorTrigger = true;
     //インスペクターからテーブルのコライダーを設定
     public Collider tableCollider;
     //インスペクターからメテオの出現位置を設定
     public Transform[] meteorSpawnPoint;
-
+    //rayの進行方向
     Vector3 direction;
-
+    //ヒットした場所
     RaycastHit hit;
+    //rayの開始地点
+    Vector3 startPoint;
+    //予兆
+    public GameObject Danger;
 
     void Awake()
     {
         gameManager = GameObject.Find("SceneManagerObj").gameObject.GetComponent<GameManager>();
-        
+        Danger.SetActive(false);
     }
 
     // Update is called once per frame
@@ -66,6 +71,7 @@ public class MapGimmick : MonoBehaviour
             if(gameTime > MeteorTime)
             {
                 Meteorgimmick();
+
             }
 
         }
@@ -74,20 +80,18 @@ public class MapGimmick : MonoBehaviour
     //メテオ
     public void Meteorgimmick()
     {
-
+        //ray呼び出し
+        Rayhit();
         //0から配列の要素数-1までのランダムな整数を取得
         int randomIndex = Random.Range(0, meteorSpawnPoint.Length);
-
         //ランダムに選ばれた出現位置のtranceformを取得
         Transform spawnpoint = meteorSpawnPoint[randomIndex];
-
         //rayの進行方向の取得
-        direction = -spawnpoint.transform.transform.up;
-
+        direction = -spawnpoint.transform.up;
+        //rayの生成場所の取得
+        startPoint = spawnpoint.position;
         //選ばれた場所の位置にメテオを生成
         Instantiate(minimeteor, spawnpoint.position,spawnpoint.rotation);
-
-        Rayhit();
 
         gameTime = 0;
         ballTrigger=true;
@@ -96,7 +100,7 @@ public class MapGimmick : MonoBehaviour
     //ボール
     public void BallFallgimmick()
     {
-        Debug.Log("ゲーム開始から30秒経過、ボールを降らせます");
+        Debug.Log("ゲーム開始から10秒経過、ボールを降らせます");
         //テーブルの境界情報を取得
         Bounds tableBounds = tableCollider.bounds;
 
@@ -118,18 +122,23 @@ public class MapGimmick : MonoBehaviour
 
     private void Rayhit()
     {
-        Ray ray = new Ray(transform.position, direction);
+        Ray ray = new Ray(startPoint, direction);
         Debug.Log(ray);
-        if(Physics.Raycast(ray.origin, ray.direction, out hit))
+        if (Physics.Raycast(ray.origin, ray.direction, out hit))
+
         {
-            if(hit.collider.CompareTag("map"))
+            
+            Debug.Log("ray衝突" + hit.collider.name);
+
+            if (hit.collider.CompareTag("map"))
             {
-                Debug.Log("rayがmapに衝突");
+                Debug.Log("rayがmapに衝突" + hit.point);
+                Danger.SetActive(true);
             }
         }
     }
 
 
 
-    
+
 }
