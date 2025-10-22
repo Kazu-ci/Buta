@@ -5,6 +5,8 @@ using UnityEngine.UIElements;
 public class minimeteor : MonoBehaviour
 {
 
+    MapGimmick mapGimmick;//null
+
     bool HitCheck = false;
     public GameObject BoomEfe;      //爆発エフェクト
     EStateMachine<minimeteor> stateMachine; 
@@ -56,6 +58,7 @@ public class minimeteor : MonoBehaviour
         if (other.gameObject.tag=="map")
         {
             Debug.Log("meteorがmapに落下");
+            Destroy(mapGimmick.Danger);
             HitCheck = true;
         }
         var player = other.GetComponent<Player>();

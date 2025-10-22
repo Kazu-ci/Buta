@@ -1022,6 +1022,13 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4454720211723526585, guid: 52cc71e3c8724e54e970737f6d0bca91, type: 3}
+<<<<<<< HEAD
+=======
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4454720211723526585, guid: 52cc71e3c8724e54e970737f6d0bca91, type: 3}
+>>>>>>> noko
       propertyPath: m_TagString
       value: ball1
       objectReference: {fileID: 0}
@@ -1202,6 +1209,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 431eb91a36f3b1842adcaf3a305e02c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+<<<<<<< HEAD
 --- !u!1 &700942539
 GameObject:
   m_ObjectHideFlags: 0
@@ -1332,6 +1340,8 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+=======
+>>>>>>> noko
 --- !u!1 &739024715
 GameObject:
   m_ObjectHideFlags: 0
@@ -2203,6 +2213,10 @@ MonoBehaviour:
   meteorSpawnPoint:
   - {fileID: 0}
   - {fileID: 1688514571}
+<<<<<<< HEAD
+=======
+  Danger: {fileID: 4094331905769148685, guid: 104f8c45288669a4f9fef00cb0eb54ef, type: 3}
+>>>>>>> noko
 --- !u!4 &1570376835
 Transform:
   m_ObjectHideFlags: 0
@@ -2231,6 +2245,13 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3505990822868992613, guid: d9c710f75164bd541b0511d9644cd086, type: 3}
+<<<<<<< HEAD
+=======
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3505990822868992613, guid: d9c710f75164bd541b0511d9644cd086, type: 3}
+>>>>>>> noko
       propertyPath: m_TagString
       value: ball2
       objectReference: {fileID: 0}
@@ -3290,6 +3311,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: 3 (1)
       objectReference: {fileID: 0}
+<<<<<<< HEAD
+=======
+    - target: {fileID: 4084486429468319758, guid: d765fe70ee90a9d40bb8321a5c1d1256, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+>>>>>>> noko
     - target: {fileID: 7457914758608920771, guid: d765fe70ee90a9d40bb8321a5c1d1256, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.279
@@ -3347,6 +3375,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: 2 (1)
       objectReference: {fileID: 0}
+<<<<<<< HEAD
+=======
+    - target: {fileID: 1786947556583206010, guid: d8d76b66b92f3c5439dea3e450f9b654, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+>>>>>>> noko
     - target: {fileID: 2464771468953870821, guid: d8d76b66b92f3c5439dea3e450f9b654, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.142
@@ -3422,5 +3457,9 @@ SceneRoots:
   - {fileID: 1658179880}
   - {fileID: 325063185}
   - {fileID: 1688514571}
+<<<<<<< HEAD
   - {fileID: 531699610}
   - {fileID: 700942542}
+=======
+  - {fileID: 853313036}
+>>>>>>> noko
