@@ -8,6 +8,10 @@ TagManager:
   - player1
   - player2
   - Player2
+  - meteor
+  - map
+  - ball1
+  - ball2
   layers:
   - Default
   - TransparentFX

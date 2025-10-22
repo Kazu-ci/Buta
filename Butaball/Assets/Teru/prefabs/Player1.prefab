@@ -33,7 +33,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.85, z: -1}
-  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
+  m_LocalScale: {x: 0.12, y: 0.12, z: 0.12}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 6959699911356822422}
@@ -70,7 +70,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 480b3d345cda0b34b96a06e96a3d98a8, type: 2}
+  - {fileID: 2100000, guid: 32ae99f0a0fe7f042b300197e843ca2c, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -121,7 +121,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1448699004713839328}
   serializedVersion: 4
-  m_Mass: 500000
+  m_Mass: 1
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -185,12 +185,12 @@ MonoBehaviour:
   accelaration: 0.1
   action: {fileID: 9142010737593287873}
   rotateSpeed: 10
-  mChragePow: 200
+  mChragePow: 15
   moveForce: 5
   maxSpeed: 25
   drag: 0.8
   cDrag: 0.95
-  chargeEffect: {fileID: 0}
+  chargeEffect: {fileID: 1193818903850759029, guid: 33d4c6f6dc9b9f7429e4ba321ae20ff4, type: 3}
   collisionMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -272,13 +272,9 @@ PrefabInstance:
       value: uploads_files_2077230_cerdo+gordito
       objectReference: {fileID: 0}
     - target: {fileID: 1884034721039157032, guid: 259e5a5ae4eaab54d961a5a1956b3f4f, type: 3}
-      propertyPath: m_Materials.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1884034721039157032, guid: 259e5a5ae4eaab54d961a5a1956b3f4f, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 480b3d345cda0b34b96a06e96a3d98a8, type: 2}
+      objectReference: {fileID: 2100000, guid: 23c0a4294dff6ea4da2e3a5a09776dcd, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

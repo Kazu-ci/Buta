@@ -49,6 +49,8 @@ public class TitleCon : MonoBehaviour
 
     }
 
+    
+
     private void EndGame()
     {
         //Esc‚ª‰Ÿ‚³‚ê‚½Žž
