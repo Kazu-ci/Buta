@@ -5,7 +5,7 @@ using UnityEngine.UIElements;
 public class minimeteor : MonoBehaviour
 {
 
-    MapGimmick mapGimmick;//null
+    MapGimmick mapGimmick;
 
     bool HitCheck = false;
     public GameObject BoomEfe;      //爆発エフェクト
@@ -24,6 +24,9 @@ public class minimeteor : MonoBehaviour
         stateMachine.Add<BoomState>((int)state.Boom);
         stateMachine.Add<EndState>((int)state.End);
         stateMachine.OnStart((int)state.Move);
+
+        mapGimmick = GameObject.Find("GimmickManager").GetComponent<MapGimmick>();
+
     }
 
     // Update is called once per frame
@@ -58,7 +61,7 @@ public class minimeteor : MonoBehaviour
         if (other.gameObject.tag=="map")
         {
             Debug.Log("meteorがmapに落下");
-            Destroy(mapGimmick.Danger);
+            mapGimmick.DestroyDanger();
             HitCheck = true;
         }
         var player = other.GetComponent<Player>();
@@ -68,11 +71,7 @@ public class minimeteor : MonoBehaviour
             
             Debug.Log("playerHit");
         }
-
     }
-
-    
-
     public class BoomState : EStateMachine<minimeteor>.StateBase
     {
 

@@ -39,6 +39,7 @@ public class MapGimmick : MonoBehaviour
     Vector3 startPoint;
     //予兆
     public GameObject Danger;
+    private GameObject dangerPoint;
 
     void Awake()
     {
@@ -93,6 +94,7 @@ public class MapGimmick : MonoBehaviour
         //数秒後に選ばれた場所の位置メテオを生成
         await UniTask.Delay(TimeSpan.FromSeconds(3));
         Instantiate(minimeteor, spawnpoint.position, spawnpoint.rotation);
+        
     }
 
     //ボール
@@ -129,8 +131,12 @@ public class MapGimmick : MonoBehaviour
             {
                 Debug.Log("rayがmapに衝突" + hit.point);
                 Vector3 hitPoint = hit.point + new Vector3(0,0.1f,0);
-                Instantiate(Danger,hitPoint, Quaternion.identity);
+                dangerPoint=Instantiate(Danger,hitPoint, Quaternion.identity);                
             }
         }
+    }
+    public void DestroyDanger()
+    {
+        Destroy(dangerPoint);
     }
 }
