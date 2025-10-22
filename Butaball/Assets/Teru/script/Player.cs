@@ -246,7 +246,7 @@ public class Player : MonoBehaviour
     {
         public override void OnStart()
         {
-            Debug.Log("Die");
+            
         }
         public override void OnUpdate()
         {
@@ -258,6 +258,8 @@ public class Player : MonoBehaviour
         }
         public override void OnEnd()
         {
+            if (Owner.gameObject.CompareTag("ball1")) { ScoreManager.Player1Score -= 2; }
+            if (Owner.gameObject.CompareTag("ball2")) { ScoreManager.Player2Score -= 2; }
             Owner.yPos = Owner.firstPos.y;
             Owner.yCurrent = Owner.firstPos.y;
             Owner.transform.position = Owner.firstPos;
