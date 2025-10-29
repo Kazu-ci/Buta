@@ -10,7 +10,7 @@ public class MainGameEnd : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
-        gameManager = GameObject.Find("SceneManagerObj").gameObject.GetComponent<GameManager>();
+        gameManager = GameObject.Find("GameManager").gameObject.GetComponent<GameManager>();
         stopper = true;
     }
 
