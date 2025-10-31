@@ -30,6 +30,14 @@ public class TimeUIManager : MonoBehaviour
             unitSec.sprite = unitSprite;
             unitSec.rectTransform.sizeDelta = unitSize;
         }
+
+
+        Debug.Log("TimeUIManager Start");
+        if (mainGameEnd == null)
+        {
+            Debug.LogError("mainGameEndがnullです（ビルド時）");
+        }
+
     }
 
     void Update()

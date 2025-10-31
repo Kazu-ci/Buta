@@ -10,8 +10,12 @@ public class MainGameEnd : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
-        gameManager = GameObject.Find("GameManager").gameObject.GetComponent<GameManager>();
+        //gameManager = GameObject.Find("GameManager").gameObject.GetComponent<GameManager>();
         stopper = true;
+    }
+    private void Start()
+    {
+        gameManager = GameManager.Instance;
     }
 
     public void MainGameTimeCount()
@@ -47,11 +51,28 @@ public class MainGameEnd : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        if (gameManager != null)
+        {
+            Debug.Log("GameManager‚Ìó‘Ô: " + gameManager.state);
+        }
+
+
         MainGameTimeCount();
         MainGameEndCheck();
+
+        Debug.Log("TimeScale: " + Time.timeScale);
+
     }
     public float GetRemainingTime()
     {
         return gameMaxTime - gameTime;
+    }
+
+    public void ResetGameTime()
+    {
+        gameTime = 0f;
+        stopper = true;
+        Debug.Log("MainGameEnd: ŠÔƒŠƒZƒbƒg");
     }
 }

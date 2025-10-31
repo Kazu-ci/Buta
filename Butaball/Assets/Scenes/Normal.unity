@@ -2167,7 +2167,7 @@ GameObject:
   - component: {fileID: 1026643416}
   m_Layer: 0
   m_Name: meteorRight
-  m_TagString: Untagged
+  m_TagString: MeteorSpawn
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3018,6 +3018,7 @@ MonoBehaviour:
   sizeGo: {x: 558, y: 88}
   countdownTime: 3
   gameStartDisplayDuration: 1.5
+  mainGameEnd: {fileID: 507739676}
   state: 0
 --- !u!4 &1656463144
 Transform:
@@ -3124,7 +3125,7 @@ GameObject:
   - component: {fileID: 1688514571}
   m_Layer: 0
   m_Name: meteorLeft
-  m_TagString: Untagged
+  m_TagString: MeteorSpawn
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

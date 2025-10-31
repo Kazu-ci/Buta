@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -19,14 +20,19 @@ public class minimeteor : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        // まず stateMachine を初期化（絶対に必要な処理）
         stateMachine = new EStateMachine<minimeteor>(this);
         stateMachine.Add<MoveState>((int)state.Move);
         stateMachine.Add<BoomState>((int)state.Boom);
         stateMachine.Add<EndState>((int)state.End);
         stateMachine.OnStart((int)state.Move);
 
-        mapGimmick = GameObject.Find("GimmickManager").GetComponent<MapGimmick>();
-
+        // その後、mapGimmick を参照（演出に必要なだけ）
+        mapGimmick = MapGimmick.Instance;
+        if (mapGimmick == null)
+        {
+            Debug.LogWarning("MapGimmick.Instance が null（演出はスキップされる可能性あり）");
+        }
     }
 
     // Update is called once per frame

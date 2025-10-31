@@ -3,6 +3,10 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    //シングルトン化
+    public static GameManager Instance { get; private set; }
+
+
     public enum State
     {
         Start,
@@ -34,6 +38,8 @@ public class GameManager : MonoBehaviour
     private float gameStartTimer;
     private bool gameStarted = false;
 
+    [SerializeField] private MainGameEnd mainGameEnd;
+
     public State state;
 
     void Start()
@@ -51,8 +57,24 @@ public class GameManager : MonoBehaviour
         countdownImage.gameObject.SetActive(true);
     }
 
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            //重複防止
+            Destroy(this.gameObject);
+            return;
+        }
+
+        Instance = this;
+        //シーンをまたいでも保持
+        //DontDestroyOnLoad(this.gameObject);
+    }
+
     void Update()
     {
+        EndGame();
+        Debug.Log("ok");
         switch (state)
         {
             case State.Start:
@@ -108,6 +130,7 @@ public class GameManager : MonoBehaviour
             countdownImage.gameObject.SetActive(false);
             state = State.Ingame;
             Debug.Log(" Game Start!");
+            mainGameEnd.ResetGameTime();
         }
     }
 
@@ -117,6 +140,23 @@ public class GameManager : MonoBehaviour
         countdownImage.sprite = sprite;
         countdownImage.rectTransform.sizeDelta = size;
     }
+
+    private void EndGame()
+    {
+        //Escが押された時
+        if (Input.GetKey(KeyCode.Escape))
+        {
+
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;//ゲームプレイ終了
+#else
+    Application.Quit();//ゲームプレイ終了
+#endif
+        }
+
+    }
+
+
 
     public State GetGameState() => state;
 }

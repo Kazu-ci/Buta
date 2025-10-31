@@ -26,7 +26,7 @@ public class SceneLoaderWithFade : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject); //シーンをまたいで生き残る
+            //DontDestroyOnLoad(gameObject); //シーンをまたいで生き残る
         }
         else
         {

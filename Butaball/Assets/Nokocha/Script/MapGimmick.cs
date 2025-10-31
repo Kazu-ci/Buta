@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class MapGimmick : MonoBehaviour
 {
+
+    public static MapGimmick Instance { get; private set; }
+
     //メテオオブジェクト
     public GameObject minimeteor;
     //ゲームIngameのステート管理
@@ -43,8 +46,28 @@ public class MapGimmick : MonoBehaviour
 
     void Awake()
     {
-        gameManager = GameObject.Find("SceneManagerObj").gameObject.GetComponent<GameManager>();
-        
+        //gameManager = GameObject.Find("GameManager").gameObject.GetComponent<GameManager>();
+
+        Instance = this;
+    }
+
+    private void Start()
+    {
+        gameManager = GameManager.Instance;
+        if (gameManager == null)
+        {
+            Debug.LogError("GameManager.Instanceがnull");
+        }
+        //シーン内の "MeteorSpawn" タグが付いたオブジェクトを取得
+        GameObject[] spawnObjects = GameObject.FindGameObjectsWithTag("MeteorSpawn");
+        meteorSpawnPoint = new Transform[spawnObjects.Length];
+        for (int i = 0; i < spawnObjects.Length; i++)
+        {
+            meteorSpawnPoint[i] = spawnObjects[i].transform;
+        }
+
+
+
     }
 
     // Update is called once per frame
@@ -80,24 +103,28 @@ public class MapGimmick : MonoBehaviour
     //メテオ
     async public void Meteorgimmick()
     {
-        //0から配列の要素数-1までのランダムな整数を取得
         int randomIndex = UnityEngine.Random.Range(0, meteorSpawnPoint.Length);
-        //ランダムに選ばれた出現位置のtranceformを取得
         Transform spawnpoint = meteorSpawnPoint[randomIndex];
-        //rayの進行方向の取得
-        direction = -spawnpoint.transform.up;
-        //rayの生成場所の取得
-        startPoint = spawnpoint.position;
-        //ray呼び出し
+
+        if (spawnpoint == null)
+        {
+            Debug.LogError("spawnpointがnullです（破棄された可能性）");
+            return;
+        }
+
+        // 必要な情報をキャッシュ
+        Vector3 spawnPosition = spawnpoint.position;
+        Quaternion spawnRotation = spawnpoint.rotation;
+        direction = -spawnpoint.up;
+        startPoint = spawnPosition;
+
         Rayhit();
-        //ゲーム内時間リセット
         gameTime = 0;
-        //ボールトリガー復活
         ballTrigger = true;
-        //数秒後に選ばれた場所の位置メテオを生成
+
         await UniTask.Delay(TimeSpan.FromSeconds(3));
-        Instantiate(minimeteor, spawnpoint.position, spawnpoint.rotation);
-        
+
+        Instantiate(minimeteor, spawnPosition, spawnRotation);
     }
 
     //ボール

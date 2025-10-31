@@ -12,6 +12,7 @@ TagManager:
   - map
   - ball1
   - ball2
+  - MeteorSpawn
   layers:
   - Default
   - TransparentFX

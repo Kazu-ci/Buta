@@ -15,6 +15,8 @@ public class button : MonoBehaviour
     }
     public void GoToTitle()
     {
+        
         SceneManager.LoadScene("Title");  // ƒV[ƒ“–¼"Title"‚É•ÏX‚µ‚Ä‚­‚¾‚³‚¢
+        
     }
 }
